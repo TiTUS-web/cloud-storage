@@ -4,25 +4,25 @@ const Register = () => {
   return (
     <div className='register' style={{ padding: '189px 0px 150px' }}>
       <Title>Register</Title>
-      <RegisterContainer>
-        <RegisterBlock>
+      <Container>
+        <Block>
           <Label>First Name</Label>
           <Input placeholder='Enter first name' />
-        </RegisterBlock>
-        <RegisterBlock>
+        </Block>
+        <Block>
           <Label>Last Name</Label>
           <Input placeholder='Enter last name' />
-        </RegisterBlock>
-        <RegisterBlock>
+        </Block>
+        <Block>
           <Label>Email</Label>
           <Input placeholder='Enter email' />
-        </RegisterBlock>
-        <RegisterBlock>
+        </Block>
+        <Block>
           <Label>Password</Label>
           <Input placeholder='Enter password' type='password' />
-        </RegisterBlock>
+        </Block>
         <Button>Register</Button>
-      </RegisterContainer>
+      </Container>
     </div>
   );
 };
@@ -38,14 +38,14 @@ const Title = styled.h2`
   margin-bottom: 80px;
 `;
 
-const RegisterContainer = styled.div`
+const Container = styled.div`
   display: flex;
   margin: 0 auto;
   max-width: 630px;
   flex-direction: column;
 `;
 
-const RegisterBlock = styled.div`
+const Block = styled.div`
   :not(:last-child) {
     margin-bottom: 37px;
   }
@@ -82,13 +82,4 @@ const Button = styled.button`
   margin: 0 auto;
 `;
 
-const Span = styled.span`
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
-  color: #adadad;
-  display: block;
-  text-align: center;
-  margin-top: 35px !important;
-`;
 export default Register;

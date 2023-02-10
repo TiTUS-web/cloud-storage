@@ -5,20 +5,20 @@ const Login = () => {
   return (
     <div className='login' style={{ padding: '189px 0px 150px' }}>
       <Title>Login</Title>
-      <LoginContainer>
-        <LoginBlock>
+      <Container>
+        <Block>
           <Label>Email</Label>
           <Input placeholder='mail@example.com' />
-        </LoginBlock>
-        <LoginBlock>
+        </Block>
+        <Block>
           <Label>Password</Label>
           <Input placeholder='***********' type='password' />
-        </LoginBlock>
+        </Block>
         <Button>Login</Button>
         <Link to='/recover'>
           <Span>Forget Password</Span>
         </Link>
-      </LoginContainer>
+      </Container>
     </div>
   );
 };
@@ -34,14 +34,14 @@ const Title = styled.h2`
   margin-bottom: 80px;
 `;
 
-const LoginContainer = styled.div`
+const Container = styled.div`
   display: flex;
   margin: 0 auto;
   max-width: 630px;
   flex-direction: column;
 `;
 
-const LoginBlock = styled.div`
+const Block = styled.div`
   :not(:last-child) {
     margin-bottom: 37px;
   }

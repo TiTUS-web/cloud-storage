@@ -4,13 +4,13 @@ const Recover = () => {
   return (
     <div className='recover' style={{ padding: '189px 0px 150px' }}>
       <Title>Recover</Title>
-      <RecoverContainer>
-        <RecoverBlock>
+      <Container>
+        <Block>
           <Label>Email</Label>
           <Input placeholder='mail@example.com' />
-        </RecoverBlock>
+        </Block>
         <Button>Recover</Button>
-      </RecoverContainer>
+      </Container>
     </div>
   );
 };
@@ -26,14 +26,14 @@ const Title = styled.h2`
   margin-bottom: 80px;
 `;
 
-const RecoverContainer = styled.div`
+const Container = styled.div`
   display: flex;
   margin: 0 auto;
   max-width: 630px;
   flex-direction: column;
 `;
 
-const RecoverBlock = styled.div`
+const Block = styled.div`
   :not(:last-child) {
     margin-bottom: 37px;
   }
@@ -70,13 +70,4 @@ const Button = styled.button`
   margin: 0 auto;
 `;
 
-const Span = styled.span`
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
-  color: #adadad;
-  display: block;
-  text-align: center;
-  margin-top: 35px !important;
-`;
 export default Recover;

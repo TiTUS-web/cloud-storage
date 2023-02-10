@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import styled from 'styled-components';
+
+import Header from './components/Header';
+import { background } from './images';
+import Promo from './modules/promo/';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className='app'
+      style={{
+        background: `url(${background})`,
+        backgroundRepeat: 'no-repeat',
+        height: '100%',
+      }}
+    >
+      <AppWrapper>
+        <Header />
+        <AppContent>
+          <Routes>
+            <Route path='/promo' element={<Promo />} />
+          </Routes>
+        </AppContent>
+      </AppWrapper>
     </div>
   );
 }
+
+const AppWrapper = styled.div`
+  max-width: 1440px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const AppContent = styled.main``;
 
 export default App;

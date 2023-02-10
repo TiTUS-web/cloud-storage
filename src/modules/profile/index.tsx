@@ -1,27 +1,35 @@
 import styled from 'styled-components';
 
-const Register = () => {
+const Profile = () => {
   return (
-    <div className='register' style={{ padding: '189px 0px 150px' }}>
-      <Title>Register</Title>
+    <div className='profile' style={{ padding: '189px 0px 150px' }}>
+      <Title>Profile</Title>
       <Container>
         <Block>
           <Label>First Name</Label>
-          <Input placeholder='Enter first name' />
+          <Input placeholder='First name' />
         </Block>
         <Block>
           <Label>Last Name</Label>
-          <Input placeholder='Enter last name' />
+          <Input placeholder='Last name' />
         </Block>
         <Block>
           <Label>Email</Label>
-          <Input placeholder='Enter email' />
+          <Input placeholder='Email' />
         </Block>
         <Block>
           <Label>Password</Label>
-          <Input placeholder='Enter password' type='password' />
+          <Input placeholder='Password' type='password' />
         </Block>
-        <Button>Register</Button>
+        <Block>
+          <Label>New Password</Label>
+          <Input placeholder='New Password' type='password' />
+        </Block>
+        <Block>
+          <Label>Renew Password</Label>
+          <Input placeholder='Renew Password' type='password' />
+        </Block>
+        <Button>Save</Button>
       </Container>
     </div>
   );
@@ -82,4 +90,4 @@ const Button = styled.button`
   margin: 0 auto;
 `;
 
-export default Register;
+export default Profile;

@@ -6,6 +6,7 @@ import { background, backgroundFull } from './images';
 import Login from './modules/auth/Login';
 import Recover from './modules/auth/Recover';
 import Register from './modules/auth/Register';
+import Profile from './modules/profile/';
 import Promo from './modules/promo/';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/recover' element={<Recover />} />
+            <Route path='/profile' element={<Profile />} />
           </Routes>
         </AppContent>
       </AppWrapper>

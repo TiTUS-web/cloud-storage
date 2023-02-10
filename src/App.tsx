@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Header from './components/Header';
 import { background, backgroundFull } from './images';
 import Login from './modules/auth/Login';
+import Recover from './modules/auth/Recover';
 import Promo from './modules/promo/';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             <Route path='/promo' element={<Promo />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/recover' element={<Recover />} />
           </Routes>
         </AppContent>
       </AppWrapper>

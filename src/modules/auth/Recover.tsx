@@ -1,24 +1,16 @@
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Login = () => {
+const Recover = () => {
   return (
-    <div className='login' style={{ padding: '189px 0px 150px' }}>
-      <Title>Login</Title>
-      <LoginContainer>
-        <LoginBlock>
+    <div className='recover' style={{ padding: '189px 0px 150px' }}>
+      <Title>Recover</Title>
+      <RecoverContainer>
+        <RecoverBlock>
           <Label>Email</Label>
           <Input placeholder='mail@example.com' />
-        </LoginBlock>
-        <LoginBlock>
-          <Label>Password</Label>
-          <Input placeholder='***********' type='password' />
-        </LoginBlock>
-        <Button>Login</Button>
-        <Link to='/recover'>
-          <Span>Forget Password</Span>
-        </Link>
-      </LoginContainer>
+        </RecoverBlock>
+        <Button>Recover</Button>
+      </RecoverContainer>
     </div>
   );
 };
@@ -34,14 +26,14 @@ const Title = styled.h2`
   margin-bottom: 80px;
 `;
 
-const LoginContainer = styled.div`
+const RecoverContainer = styled.div`
   display: flex;
   margin: 0 auto;
   max-width: 630px;
   flex-direction: column;
 `;
 
-const LoginBlock = styled.div`
+const RecoverBlock = styled.div`
   :not(:last-child) {
     margin-bottom: 37px;
   }
@@ -87,4 +79,4 @@ const Span = styled.span`
   text-align: center;
   margin-top: 35px !important;
 `;
-export default Login;
+export default Recover;

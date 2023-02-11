@@ -1,33 +1,31 @@
 import styled from 'styled-components';
 
-import {
-  tableActions,
-  typeImg,
-  accessView,
-  accessEdit,
-  accessDelete,
-  search,
-  add,
-  upload,
-  left,
-  right,
-} from '../../images';
+import Table from './components/Table';
+import Tile from './components/Tile';
+
+import { search, add, upload, left, right, tile, table } from '../../images';
 
 import { StyledProps } from '../../types/styled';
 
 const Files = () => {
   return (
-    <div className='files' style={{ padding: '189px 0px 150px' }}>
+    <section className='files' style={{ padding: '189px 0px 150px' }}>
       <Title>My files</Title>
       <Container>
-        <TableHeader>
-          <Block style={{ justifyContent: 'space-between' }}>
+        <Header>
+          <Block
+            style={{ justifyContent: 'space-between', alignItems: 'center' }}
+          >
             <Block style={{ width: '530px' }}>
               <SearchInput placeholder='Enter a file name and press Enter' />
               <SearchButton>
                 <IconButton src={search} alt='search'></IconButton>
                 Search
               </SearchButton>
+            </Block>
+            <Block>
+              <IconButton src={tile} alt='tile'></IconButton>
+              <IconButton src={table} alt='table'></IconButton>
             </Block>
             <Block>
               <AddButton>
@@ -40,134 +38,16 @@ const Files = () => {
               </UploadButton>
             </Block>
           </Block>
-        </TableHeader>
-        <Table>
-          <Head>
-            <Tr>
-              <Th center>
-                <CheckBox type='checkbox' />
-              </Th>
-              <Th>Type</Th>
-              <Th>Name</Th>
-              <Th center>File count</Th>
-              <Th center>Date created</Th>
-              <Th>Size</Th>
-              <Th center>Access</Th>
-              <Th center>
-                <Action src={tableActions} alt='actions' />
-              </Th>
-            </Tr>
-          </Head>
-          <Body>
-            <Tr>
-              <Td center>
-                <CheckBox type='checkbox' />
-              </Td>
-              <Td>
-                <Type src={typeImg} alt='img' />
-              </Td>
-              <Td>Lorem-ipsum_sitamet.jpg</Td>
-              <Td center>1</Td>
-              <Td center>2021.09.30</Td>
-              <Td>12.44 Mb</Td>
-              <Td center>
-                <Access>public</Access>
-              </Td>
-              <Td center>
-                <Action src={accessView} alt='view' />
-                <Action src={accessDelete} alt='delete' />
-                <Action src={accessEdit} alt='edit' />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td center>
-                <CheckBox type='checkbox' />
-              </Td>
-              <Td>
-                <Type src={typeImg} alt='img' />
-              </Td>
-              <Td>Lorem-ipsum_sitamet.jpg</Td>
-              <Td center>1</Td>
-              <Td center>2021.09.30</Td>
-              <Td>12.44 Mb</Td>
-              <Td center>
-                <Access>public</Access>
-              </Td>
-              <Td center>
-                <Action src={accessView} alt='view' />
-                <Action src={accessDelete} alt='delete' />
-                <Action src={accessEdit} alt='edit' />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td center>
-                <CheckBox type='checkbox' />
-              </Td>
-              <Td>
-                <Type src={typeImg} alt='img' />
-              </Td>
-              <Td>Lorem-ipsum_sitamet.jpg</Td>
-              <Td center>1</Td>
-              <Td center>2021.09.30</Td>
-              <Td>12.44 Mb</Td>
-              <Td center>
-                <Access>public</Access>
-              </Td>
-              <Td center>
-                <Action src={accessView} alt='view' />
-                <Action src={accessDelete} alt='delete' />
-                <Action src={accessEdit} alt='edit' />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td center>
-                <CheckBox type='checkbox' />
-              </Td>
-              <Td>
-                <Type src={typeImg} alt='img' />
-              </Td>
-              <Td>Lorem-ipsum_sitamet.jpg</Td>
-              <Td center>1</Td>
-              <Td center>2021.09.30</Td>
-              <Td>12.44 Mb</Td>
-              <Td center>
-                <Access>public</Access>
-              </Td>
-              <Td center>
-                <Action src={accessView} alt='view' />
-                <Action src={accessDelete} alt='delete' />
-                <Action src={accessEdit} alt='edit' />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td center>
-                <CheckBox type='checkbox' />
-              </Td>
-              <Td>
-                <Type src={typeImg} alt='img' />
-              </Td>
-              <Td>Lorem-ipsum_sitamet.jpg</Td>
-              <Td center>1</Td>
-              <Td center>2021.09.30</Td>
-              <Td>12.44 Mb</Td>
-              <Td center>
-                <Access>public</Access>
-              </Td>
-              <Td center>
-                <Action src={accessView} alt='view' />
-                <Action src={accessDelete} alt='delete' />
-                <Action src={accessEdit} alt='edit' />
-              </Td>
-            </Tr>
-          </Body>
-        </Table>
-        <TableFooter>
-          <RowsPerPage style={{ marginRight: '95px' }}>1-10 of 706</RowsPerPage>
+        </Header>
+        {/* <Tile /> */}
+        {/* <Table /> */}
+        <Footer>
+          <RowsPerPage>1-10 of 706</RowsPerPage>
           <IconButton src={left} left alt='leftArrow'></IconButton>
           <IconButton src={right} right alt='rightArrow'></IconButton>
-        </TableFooter>
+        </Footer>
       </Container>
-    </div>
+    </section>
   );
 };
 
@@ -182,21 +62,22 @@ const Title = styled.h2`
   margin-bottom: 80px;
 `;
 
-const TableHeader = styled.header`
+const Header = styled.header`
   background: #f4f7fc;
   padding: 10px;
 `;
 
-const TableFooter = styled.footer`
+const Footer = styled.footer`
   padding: 10px;
   background: #fff;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   border: 1px solid #ddd;
-  border-top: none;
 `;
 
 const RowsPerPage = styled.span`
+  margin-right: 95px;
   font-weight: 600;
   font-size: 12px;
   line-height: 15px;
@@ -279,107 +160,16 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #ddd;
-  width: 100%;
-  border-radius: 6px;
-`;
-
 const IconButton = styled.img`
   cursor: pointer;
-  margin-right: ${(props: StyledProps) =>
-    props.left || props.right ? '50px' : '10px'};
-  transition: 0.2s;
-
-  :hover {
-    opacity: 0.8;
-  }
-`;
-
-const Type = styled.img``;
-
-const Action = styled.img`
-  cursor: pointer;
-  transition: 0.2s;
-
-  :not(:last-child) {
-    margin-right: 13px;
-  }
-
-  :hover {
-    opacity: 0.8;
-  }
-`;
-
-const CheckBox = styled.input`
-  cursor: pointer;
-  background: #0a65ff;
-  border-radius: 3px;
-  accent-color: #0a65ff;
-  height: 20px;
   width: 20px;
-`;
-
-const Access = styled.span`
-  background: #0a65ff;
-  border-radius: 11px;
-  padding: 4px 5px;
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 12px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #ffffff;
-`;
-
-const Head = styled.thead``;
-
-const Body = styled.tbody``;
-
-const Th = styled.th`
-  font-weight: bold;
-  text-align: ${(props: StyledProps) => (props.center ? 'center' : 'left')};
-  border: none;
-  padding: 10px 15px;
-  background: #ededed;
-  font-size: 14px;
-  border-top: 1px solid #ddd;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 15px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #606f89;
-  background: #f4f7fc;
-  vertical-align: middle;
-`;
-
-const Td = styled.td`
-  text-align: ${(props: StyledProps) => (props.center ? 'center' : 'left')};
-  border: none;
-  padding: 10px 15px;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
-  color: #2e3b52;
-  vertical-align: middle;
-
-  :first-child {
-    border-left: 1px solid #ddd;
-  }
-
-  :last-child {
-    border-right: 1px solid #ddd;
-  }
-`;
-
-const Tr = styled.tr`
-  transition: 0.1s;
+  height: 20px;
+  margin-right: ${(props: StyledProps) =>
+    props.left || props.right ? '40px' : '10px'};
+  transition: 0.2s;
 
   :hover {
-    background: #f4f7fc;
+    opacity: 0.8;
   }
 `;
 

@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import Table from './components/Table';
 import Tile from './components/Tile';
 
-import { search, add, upload, left, right, tile, table } from '../../images';
-
-import { StyledProps } from '../../types/styled';
+import { search, add, upload, left, right, tile, table } from '@/images';
+import { StyledProps } from '@/types/styled';
 
 const Files = () => {
   return (

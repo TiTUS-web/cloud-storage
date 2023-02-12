@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { promo } from '../../images';
+import { promo } from '@/images';
 
 const Promo = () => {
   return (

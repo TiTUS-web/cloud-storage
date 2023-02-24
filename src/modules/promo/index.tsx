@@ -5,7 +5,7 @@ import { promo } from '@/images';
 const Promo = () => {
   return (
     <section
-      className='Promo'
+      className='promo'
       style={{
         padding: '189px 0 215px',
         background: `url(${promo})`,
@@ -13,7 +13,7 @@ const Promo = () => {
         backgroundPosition: 'right',
       }}
     >
-      <PromoBlock>
+      <Block>
         <MainTitle>Personal and Business</MainTitle>
         <Line />
 
@@ -24,12 +24,12 @@ const Promo = () => {
           to begin uploading
         </Text>
         <Button>Try SkyCloud Now</Button>
-      </PromoBlock>
+      </Block>
     </section>
   );
 };
 
-const PromoBlock = styled.div`
+const Block = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;

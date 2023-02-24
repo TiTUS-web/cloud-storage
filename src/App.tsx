@@ -26,9 +26,9 @@ function App() {
         height: '100%',
       }}
     >
-      <AppWrapper>
+      <Wrapper>
         <Header />
-        <AppContent>
+        <Content>
           <Routes>
             <Route path='/promo' element={<Promo />} />
             <Route path='/login' element={<Login />} />
@@ -37,13 +37,13 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/files' element={<Files />} />
           </Routes>
-        </AppContent>
-      </AppWrapper>
+        </Content>
+      </Wrapper>
     </div>
   );
 }
 
-const AppWrapper = styled.div`
+const Wrapper = styled.div`
   max-width: 1440px;
   padding-right: 20px;
   padding-left: 20px;
@@ -52,6 +52,6 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-const AppContent = styled.main``;
+const Content = styled.main``;
 
 export default App;

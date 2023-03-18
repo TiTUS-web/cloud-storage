@@ -8,7 +8,7 @@ const Login = () => {
       <Container>
         <Block>
           <Label>Email</Label>
-          <Input placeholder='mail@example.com' />
+          <Input placeholder='example@mail.ru' />
         </Block>
         <Block>
           <Label>Password</Label>
@@ -59,11 +59,12 @@ const Input = styled.input`
   background: #f3f3f3;
   border-radius: 61px;
   width: 569px;
-  padding: 30px 0 30px 57px;
+  padding: 20px 30px 20px 57px;
   font-weight: 700;
   font-size: 24px;
   line-height: 27px;
   color: #adadad;
+  border: 0;
 `;
 
 const Button = styled.button`

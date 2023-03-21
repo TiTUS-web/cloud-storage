@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { document, folder } from '../../../images';
+import { document, folder } from '@/images';
 
 const Tile = () => {
   return (

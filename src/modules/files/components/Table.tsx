@@ -6,9 +6,9 @@ import {
   accessView,
   accessEdit,
   accessDelete,
-} from '../../../images';
+} from '@/images';
 
-import { StyledProps } from '../../../types/styled';
+import { StyledProps } from '@/types/styled';
 
 const Table = () => {
   return (

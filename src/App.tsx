@@ -20,7 +20,7 @@ function App() {
       className='app'
       style={{
         background:
-          location.pathname === '/promo'
+          location.pathname === '/'
             ? `url(${backgroundFull})`
             : `url(${background})`,
         height: '100%',
@@ -30,7 +30,7 @@ function App() {
         <Header />
         <Content>
           <Routes>
-            <Route path='/promo' element={<Promo />} />
+            <Route path='/' element={<Promo />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/recover' element={<Recover />} />

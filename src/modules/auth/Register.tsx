@@ -6,12 +6,8 @@ const Register = () => {
       <Title>Register</Title>
       <Container>
         <Block>
-          <Label>First Name</Label>
-          <Input placeholder='Enter first name' />
-        </Block>
-        <Block>
-          <Label>Last Name</Label>
-          <Input placeholder='Enter last name' />
+          <Label>Username</Label>
+          <Input placeholder='Enter username' />
         </Block>
         <Block>
           <Label>Email</Label>

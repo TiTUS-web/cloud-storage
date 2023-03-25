@@ -6,12 +6,8 @@ const Profile = () => {
       <Title>Profile</Title>
       <Container>
         <Block>
-          <Label>First Name</Label>
-          <Input placeholder='First name' />
-        </Block>
-        <Block>
-          <Label>Last Name</Label>
-          <Input placeholder='Last name' />
+          <Label>Username</Label>
+          <Input placeholder='Username' />
         </Block>
         <Block>
           <Label>Email</Label>

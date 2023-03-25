@@ -7,7 +7,7 @@ const Recover = () => {
       <Container>
         <Block>
           <Label>Email</Label>
-          <Input placeholder='mail@example.com' />
+          <Input placeholder='example@mail.ru' />
         </Block>
         <Button>Recover</Button>
       </Container>

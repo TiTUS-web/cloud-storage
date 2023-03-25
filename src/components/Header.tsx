@@ -12,7 +12,7 @@ const Header = () => {
         padding: '63px 0',
       }}
     >
-      <Link to='/promo'>
+      <Link to='/'>
         <Logo>SkyCloud</Logo>
       </Link>
 

@@ -7,7 +7,9 @@ import {
 import API from '@/api/axios';
 
 class Auth {
-  protected login(oCredentials: TCredentialsLogin) {
+  protected login(
+    oCredentials: TCredentialsLogin,
+  ): Promise<AxiosResponse<string>> {
     return new Promise((resolve, reject) => {
       if (!oCredentials) {
         reject();
@@ -25,7 +27,9 @@ class Auth {
     });
   }
 
-  protected registration(oCredentials: TCredentialsRegistration) {
+  protected registration(
+    oCredentials: TCredentialsRegistration,
+  ): Promise<AxiosResponse<string>> {
     return new Promise((resolve, reject) => {
       if (!oCredentials) {
         reject();
@@ -43,7 +47,7 @@ class Auth {
     });
   }
 
-  private redirect(url: string) {
+  private redirect(url: string): void {
     window.location.reload();
     window.location.replace(url);
   }

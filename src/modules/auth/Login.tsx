@@ -1,20 +1,58 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Auth from '@/api/Auth';
+
+import { AuthActionTypes } from '@/types/auth.types';
+
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const oAuth = new Auth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    return oAuth
+      .login({ email, password })
+      .then((oUser) => {
+        dispatch({
+          type: AuthActionTypes.LOGIN,
+          payload: oUser,
+        });
+        navigate('/files');
+      })
+      .catch((oErr) => {
+        // TODO make a notifyMessage component
+        console.log(oErr);
+      });
+  };
+
   return (
     <div className='login' style={{ padding: '189px 0px 150px' }}>
       <Title>Login</Title>
       <Container>
         <Block>
           <Label>Email</Label>
-          <Input placeholder='example@mail.ru' />
+          <Input
+            onChange={(event: Event | any) => setEmail(event.target.value)}
+            placeholder='example@mail.ru'
+            type='text'
+          />
         </Block>
         <Block>
           <Label>Password</Label>
-          <Input placeholder='***********' type='password' />
+          <Input
+            onChange={(event: Event | any) => setPassword(event.target.value)}
+            placeholder='***********'
+            type='password'
+          />
         </Block>
-        <Button>Login</Button>
+        <Button onClick={handleLogin}>Login</Button>
         <Link to='/recover'>
           <Span>Forget Password</Span>
         </Link>

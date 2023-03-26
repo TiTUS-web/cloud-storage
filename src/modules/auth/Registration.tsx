@@ -1,23 +1,62 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-const Register = () => {
+import Auth from '@/api/Auth';
+import { AuthActionTypes } from '@/types/auth.types';
+
+const Registration = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const oAuth = new Auth();
+  const dispatch = useDispatch();
+
+  const handleRegistration = () => {
+    oAuth
+      .registration({ username, email, password })
+      .then((oUser) => {
+        dispatch({
+          type: AuthActionTypes.REGISTRATION,
+          payload: oUser,
+        });
+      })
+      .catch((oErr) => {
+        // TODO make a notifyMessage component
+        console.log(oErr);
+      });
+  };
+
   return (
     <div className='register' style={{ padding: '189px 0px 150px' }}>
       <Title>Register</Title>
       <Container>
         <Block>
           <Label>Username</Label>
-          <Input placeholder='Enter username' />
+          <Input
+            onChange={(event: Event | any) => setUsername(event.target.value)}
+            placeholder='Enter username'
+            type='text'
+          />
         </Block>
         <Block>
           <Label>Email</Label>
-          <Input placeholder='Enter email' />
+          <Input
+            onChange={(event: Event | any) => setEmail(event.target.value)}
+            placeholder='Enter email'
+            type='text'
+          />
         </Block>
         <Block>
           <Label>Password</Label>
-          <Input placeholder='Enter password' type='password' />
+          <Input
+            onChange={(event: Event | any) => setPassword(event.target.value)}
+            placeholder='Enter password'
+            type='password'
+          />
         </Block>
-        <Button>Register</Button>
+        <Button onClick={handleRegistration}>Register</Button>
       </Container>
     </div>
   );
@@ -79,4 +118,4 @@ const Button = styled.button`
   margin: 0 auto;
 `;
 
-export default Register;
+export default Registration;

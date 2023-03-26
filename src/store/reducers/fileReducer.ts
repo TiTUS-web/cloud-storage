@@ -1,4 +1,4 @@
-import { ActionReducer } from '@/store/store.types';
+import { ActionReducer } from '@/types/store.types';
 
 const defaultState = {
   files: [],

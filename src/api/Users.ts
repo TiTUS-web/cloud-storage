@@ -1,13 +1,13 @@
 import { AxiosResponse } from 'axios';
 
 import API from '@/api/axios';
-import { IUser } from '@/api/Users/users.types';
+import { TUser } from '@/types/users.types';
 
 class Users {
   protected getUsers() {
     return new Promise((resolve, reject) => {
       API.get('users')
-        .then((data: AxiosResponse<IUser[]>) => {
+        .then((data: AxiosResponse<TUser[]>) => {
           resolve(data);
         })
         .catch((err) => {

@@ -8,11 +8,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import thunk from 'redux-thunk';
 
+import authReducer from './reducers/authReducer';
 import fileReducer from './reducers/fileReducer';
-import userReducer from './reducers/userReducer';
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  auth: authReducer,
   files: fileReducer,
 });
 

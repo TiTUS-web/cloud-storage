@@ -32,7 +32,7 @@ const Header = () => {
         <Link to='/login'>
           <ActionsButton>Login</ActionsButton>
         </Link>
-        <Link to='/register'>
+        <Link to='/registration'>
           <ActionsButton>Sign Up</ActionsButton>
         </Link>
       </Actions>

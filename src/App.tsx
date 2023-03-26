@@ -7,7 +7,7 @@ import { background, backgroundFull } from '@/images';
 
 import Login from '@/modules/auth/Login';
 import Recover from '@/modules/auth/Recover';
-import Register from '@/modules/auth/Register';
+import Registration from '@/modules/auth/Registration';
 import Files from '@/modules/files/';
 import Profile from '@/modules/profile/';
 import Promo from '@/modules/promo/';
@@ -32,7 +32,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Promo />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
+            <Route path='/registration' element={<Registration />} />
             <Route path='/recover' element={<Recover />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/files' element={<Files />} />

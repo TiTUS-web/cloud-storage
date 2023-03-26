@@ -1,4 +1,4 @@
-export interface IUser {
+export type TUser = {
   id: number;
   username: string;
   email: string;
@@ -8,4 +8,4 @@ export interface IUser {
   usedSpace: bigint;
   createdAt: string;
   updatedAt: string;
-}
+};

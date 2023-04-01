@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Auth from '@/api/Auth';
@@ -9,6 +10,8 @@ const Registration = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const oAuth = new Auth();
   const dispatch = useDispatch();
@@ -21,6 +24,7 @@ const Registration = () => {
           type: AuthActionTypes.REGISTRATION,
           payload: oUser,
         });
+        navigate('/files');
       })
       .catch((oErr) => {
         // TODO make a notifyMessage component

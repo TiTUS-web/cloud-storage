@@ -1,6 +1,7 @@
+import { TFilesState } from '@/types/files.types';
 import { ActionReducer } from '@/types/store.types';
 
-const defaultState = {
+const defaultState: TFilesState = {
   files: [],
 };
 

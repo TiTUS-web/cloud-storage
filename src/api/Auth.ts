@@ -7,8 +7,12 @@ import {
   TResponseLogin,
   TResponseRegistration,
 } from '@/types/auth.types';
+import Storage from '@/utils/Storage';
 
 class Auth {
+  private oStorage = new Storage();
+  public oUser = this.oStorage.getData('oUser') || null;
+
   public login(
     oCredentials: TCredentialsLogin,
   ): Promise<AxiosResponse<string>> {
@@ -19,7 +23,8 @@ class Auth {
 
       API.post('/auth/login', oCredentials)
         .then((oResponse: AxiosResponse<any, TResponseLogin>) => {
-          localStorage.setItem('token', oResponse.data.token);
+          this.oStorage.setData('token', oResponse.data.token);
+          this.oStorage.setData('oUser', oResponse.data.user);
           resolve(oResponse.data.user);
         })
         .catch((oErr) => {
@@ -38,13 +43,18 @@ class Auth {
 
       API.post('/auth/registration', oCredentials)
         .then((oResponse: AxiosResponse<any, TResponseRegistration>) => {
-          localStorage.setItem('token', oResponse.data.token);
+          this.oStorage.setData('token', oResponse.data.token);
+          this.oStorage.setData('oUser', oResponse.data.user);
           resolve(oResponse.data.user);
         })
         .catch((oErr) => {
           reject(oErr);
         });
     });
+  }
+
+  public logout(): void {
+    this.oStorage.removeAllData();
   }
 }
 

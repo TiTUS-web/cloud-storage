@@ -1,12 +1,50 @@
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Table from './components/Table';
 import Tile from './components/Tile';
 
-import { search, add, upload, left, right, tile, table } from '@/images';
+import Files from '@/api/Files';
+
+import { search, add, upload, tile, table } from '@/images';
+import { FilesActionTypes } from '@/types/files.types';
+import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
 
-const Files = () => {
+function Pagination() {
+  return null;
+}
+
+const MyFiles = () => {
+  const dispatch = useDispatch();
+  const oFiles = new Files();
+
+  const handleFilesDisplayMode = (sDisplayMode: string) => {
+    dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
+  };
+
+  const sFilesDisplayMode = useSelector(
+    (state: IState) => state.files.sFilesDisplayMode,
+  );
+  const bFilesNotFound = useSelector(
+    (state: IState) => state.files.bFilesNotFound,
+  );
+
+  const getFiles = () => {
+    oFiles
+      .getFiles()
+      .then((arFiles) => {
+        if (!arFiles) return;
+        dispatch({
+          type: FilesActionTypes.SET_FILES,
+          payload: arFiles,
+        });
+      })
+      .catch();
+  };
+
+  getFiles();
+
   return (
     <section className='files' style={{ padding: '189px 0px 150px' }}>
       <Title>My files</Title>
@@ -17,34 +55,48 @@ const Files = () => {
           >
             <Block style={{ width: '530px' }}>
               <SearchInput placeholder='Enter a file name and press Enter' />
-              <SearchButton>
+              <SearchButton disabled={bFilesNotFound}>
                 <IconButton src={search} alt='search'></IconButton>
                 Search
               </SearchButton>
             </Block>
-            <Block>
-              <IconButton src={tile} alt='tile'></IconButton>
-              <IconButton src={table} alt='table'></IconButton>
-            </Block>
+
+            {!bFilesNotFound && (
+              <Block>
+                <IconButton
+                  disabled={bFilesNotFound}
+                  src={tile}
+                  onClick={() => handleFilesDisplayMode('tile')}
+                  alt='tile'
+                ></IconButton>
+                <IconButton
+                  src={table}
+                  onClick={() => handleFilesDisplayMode('table')}
+                  alt='table'
+                ></IconButton>
+              </Block>
+            )}
+
             <Block>
               <AddButton>
                 <IconButton src={add} alt='add'></IconButton>
                 Add Folder
               </AddButton>
               <UploadButton>
-                <IconButton src={upload} alt='upload'></IconButton>
+                <IconButton
+                  disabled={bFilesNotFound}
+                  src={upload}
+                  alt='upload'
+                ></IconButton>
                 Upload File
               </UploadButton>
             </Block>
           </Block>
         </Header>
-        {/* <Tile /> */}
-        {/* <Table /> */}
-        <Footer>
-          <RowsPerPage>1-10 of 706</RowsPerPage>
-          <IconButton src={left} left alt='leftArrow'></IconButton>
-          <IconButton src={right} right alt='rightArrow'></IconButton>
-        </Footer>
+
+        {sFilesDisplayMode === 'table' ? <Table /> : <Tile />}
+
+        <Footer>{sFilesDisplayMode && <Pagination />}</Footer>
       </Container>
     </section>
   );
@@ -73,15 +125,6 @@ const Footer = styled.footer`
   justify-content: flex-end;
   align-items: center;
   border: 1px solid #ddd;
-`;
-
-const RowsPerPage = styled.span`
-  margin-right: 95px;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 15px;
-  letter-spacing: 0.05em;
-  color: #606f89;
 `;
 
 const Block = styled.div`
@@ -172,4 +215,4 @@ const IconButton = styled.img`
   }
 `;
 
-export default Files;
+export default MyFiles;

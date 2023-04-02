@@ -1,59 +1,32 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { document, folder } from '@/images';
+import { folder } from '@/images';
+import { TFile } from '@/types/files.types';
+import { IState } from '@/types/store.types';
 
 const Tile = () => {
+  const arFiles = useSelector((state: IState) => state.files.arFiles);
+  const bFilesNotFound = useSelector(
+    (state: IState) => state.files.bFilesNotFound,
+  );
+
+  if (bFilesNotFound) {
+    return (
+      <FilesNotFound>
+        No files were found. You can create a file by clicking "Add Folder"
+      </FilesNotFound>
+    );
+  }
   return (
     <div className='tile' style={{ margin: '50px' }}>
       <Container>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={folder}></FileIcon>
-          <FileName>Folder</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={document}></FileIcon>
-          <FileName>Document.docx</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={document}></FileIcon>
-          <FileName>Document.docx</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={document}></FileIcon>
-          <FileName>Document.docx</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={document}></FileIcon>
-          <FileName>Document.docx</FileName>
-        </Block>
-        <Block>
-          <FileIcon src={document}></FileIcon>
-          <FileName>Document.docx</FileName>
-        </Block>
+        {arFiles.map((oFile: TFile) => (
+          <Block key={oFile.id}>
+            <FileIcon src={folder}></FileIcon>
+            <FileName>{oFile.name}</FileName>
+          </Block>
+        ))}
       </Container>
     </div>
   );
@@ -61,8 +34,20 @@ const Tile = () => {
 
 const Container = styled.div`
   display: flex;
-  jusitify-content: space-between;
   flex-wrap: wrap;
+`;
+
+const FilesNotFound = styled.div`
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  color: rgba(46, 59, 82, 0.33);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  text-align: center;
+  margin: 50px 0;
 `;
 
 const Block = styled.div`
@@ -72,7 +57,7 @@ const Block = styled.div`
   width: 92px;
 
   :not(:last-child) {
-    margin-right: 29.8px;
+    margin-right: 28.8px;
   }
 `;
 

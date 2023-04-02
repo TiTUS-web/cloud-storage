@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -8,9 +9,24 @@ import {
   accessDelete,
 } from '@/images';
 
+import { TFile } from '@/types/files.types';
+import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
 
 const Table = () => {
+  const arFiles = useSelector((state: IState) => state.files.arFiles);
+  const bFilesNotFound = useSelector(
+    (state: IState) => state.files.bFilesNotFound,
+  );
+
+  if (bFilesNotFound) {
+    return (
+      <FilesNotFound>
+        No files were found. You can create a file by clicking "Add Folder"
+      </FilesNotFound>
+    );
+  }
+
   return (
     <table
       className='table'
@@ -28,9 +44,8 @@ const Table = () => {
           </Th>
           <Th>Type</Th>
           <Th>Name</Th>
-          <Th center>File count</Th>
           <Th center>Date created</Th>
-          <Th>Size</Th>
+          <Th center>Size</Th>
           <Th center>Access</Th>
           <Th center>
             <Action src={tableActions} alt='actions' />
@@ -38,112 +53,46 @@ const Table = () => {
         </Tr>
       </Head>
       <Body>
-        <Tr>
-          <Td center>
-            <CheckBox type='checkbox' />
-          </Td>
-          <Td>
-            <Type src={typeImg} alt='img' />
-          </Td>
-          <Td>Lorem-ipsum_sitamet.jpg</Td>
-          <Td center>1</Td>
-          <Td center>2021.09.30</Td>
-          <Td>12.44 Mb</Td>
-          <Td center>
-            <Access>public</Access>
-          </Td>
-          <Td center>
-            <Action src={accessView} alt='view' />
-            <Action src={accessDelete} alt='delete' />
-            <Action src={accessEdit} alt='edit' />
-          </Td>
-        </Tr>
-        <Tr>
-          <Td center>
-            <CheckBox type='checkbox' />
-          </Td>
-          <Td>
-            <Type src={typeImg} alt='img' />
-          </Td>
-          <Td>Lorem-ipsum_sitamet.jpg</Td>
-          <Td center>1</Td>
-          <Td center>2021.09.30</Td>
-          <Td>12.44 Mb</Td>
-          <Td center>
-            <Access>public</Access>
-          </Td>
-          <Td center>
-            <Action src={accessView} alt='view' />
-            <Action src={accessDelete} alt='delete' />
-            <Action src={accessEdit} alt='edit' />
-          </Td>
-        </Tr>
-        <Tr>
-          <Td center>
-            <CheckBox type='checkbox' />
-          </Td>
-          <Td>
-            <Type src={typeImg} alt='img' />
-          </Td>
-          <Td>Lorem-ipsum_sitamet.jpg</Td>
-          <Td center>1</Td>
-          <Td center>2021.09.30</Td>
-          <Td>12.44 Mb</Td>
-          <Td center>
-            <Access>public</Access>
-          </Td>
-          <Td center>
-            <Action src={accessView} alt='view' />
-            <Action src={accessDelete} alt='delete' />
-            <Action src={accessEdit} alt='edit' />
-          </Td>
-        </Tr>
-        <Tr>
-          <Td center>
-            <CheckBox type='checkbox' />
-          </Td>
-          <Td>
-            <Type src={typeImg} alt='img' />
-          </Td>
-          <Td>Lorem-ipsum_sitamet.jpg</Td>
-          <Td center>1</Td>
-          <Td center>2021.09.30</Td>
-          <Td>12.44 Mb</Td>
-          <Td center>
-            <Access>public</Access>
-          </Td>
-          <Td center>
-            <Action src={accessView} alt='view' />
-            <Action src={accessDelete} alt='delete' />
-            <Action src={accessEdit} alt='edit' />
-          </Td>
-        </Tr>
-        <Tr>
-          <Td center>
-            <CheckBox type='checkbox' />
-          </Td>
-          <Td>
-            <Type src={typeImg} alt='img' />
-          </Td>
-          <Td>Lorem-ipsum_sitamet.jpg</Td>
-          <Td center>1</Td>
-          <Td center>2021.09.30</Td>
-          <Td>12.44 Mb</Td>
-          <Td center>
-            <Access>public</Access>
-          </Td>
-          <Td center>
-            <Action src={accessView} alt='view' />
-            <Action src={accessDelete} alt='delete' />
-            <Action src={accessEdit} alt='edit' />
-          </Td>
-        </Tr>
+        {arFiles.map((oFile: TFile) => (
+          <Tr key={oFile.id}>
+            <Td center>
+              <CheckBox type='checkbox' />
+            </Td>
+            <Td>
+              <Type src={typeImg} alt='img' />
+            </Td>
+            <Td>{oFile.name}</Td>
+            <Td center>{oFile.createdAt}</Td>
+            <Td center>{oFile.size}</Td>
+            <Td center>
+              <Access>public</Access>
+            </Td>
+            <Td center>
+              <Action src={accessView} alt='view' />
+              <Action src={accessDelete} alt='delete' />
+              <Action src={accessEdit} alt='edit' />
+            </Td>
+          </Tr>
+        ))}
       </Body>
     </table>
   );
 };
 
 const Type = styled.img``;
+
+const FilesNotFound = styled.div`
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  color: rgba(46, 59, 82, 0.33);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  text-align: center;
+  margin: 50px 0;
+`;
 
 const Action = styled.img`
   cursor: pointer;

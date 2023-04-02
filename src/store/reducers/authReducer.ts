@@ -1,5 +1,5 @@
 import { AuthActionTypes, TAuthState } from '@/types/auth.types';
-import { ActionReducer } from '@/types/store.types';
+import { AuthActionReducer } from '@/types/store.types';
 
 const defaultState: TAuthState = {
   oUser: null,
@@ -8,7 +8,7 @@ const defaultState: TAuthState = {
 
 export default function authReducer(
   state = defaultState,
-  action: ActionReducer,
+  action: AuthActionReducer,
 ) {
   switch (action.type) {
     case AuthActionTypes.REGISTRATION:

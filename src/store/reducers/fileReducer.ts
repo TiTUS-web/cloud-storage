@@ -1,15 +1,28 @@
-import { TFilesState } from '@/types/files.types';
-import { ActionReducer } from '@/types/store.types';
+import { FilesActionTypes, TFilesState } from '@/types/files.types';
+import { FilesActionReducer } from '@/types/store.types';
 
 const defaultState: TFilesState = {
-  files: [],
+  sFilesDisplayMode: 'table',
+  arFiles: [],
+  bFilesNotFound: true,
 };
 
 export default function fileReducer(
   state = defaultState,
-  action: ActionReducer,
+  action: FilesActionReducer,
 ) {
   switch (action.type) {
+    case FilesActionTypes.SET_FILES_MODE:
+      return {
+        ...state,
+        sFilesDisplayMode: action.payload,
+      };
+    case FilesActionTypes.SET_FILES:
+      return {
+        ...state,
+        arFiles: action.payload,
+        bFilesNotFound: action.payload.length === 0,
+      };
     default:
       return state;
   }

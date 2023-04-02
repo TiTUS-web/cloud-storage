@@ -1,7 +1,27 @@
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Auth from '@/api/Auth';
+import { AuthActionTypes } from '@/types/auth.types';
+import { IState } from '@/types/store.types';
+
 const Header = () => {
+  const oAuth = new Auth();
+  const oUser = useSelector((state: IState) => state.auth.oUser) || oAuth.oUser;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    oAuth.logout();
+    dispatch({
+      type: AuthActionTypes.LOGOUT,
+    });
+    navigate('/login');
+  };
+
   return (
     <header
       style={{
@@ -12,9 +32,13 @@ const Header = () => {
         padding: '63px 0',
       }}
     >
-      <Link to='/'>
-        <Logo>SkyCloud</Logo>
-      </Link>
+      {oUser ? (
+        <Username>{oUser.username}</Username>
+      ) : (
+        <Link to='/'>
+          <Logo>SkyCloud</Logo>
+        </Link>
+      )}
 
       <Navigation>
         <Link to='/info'>
@@ -28,14 +52,20 @@ const Header = () => {
         </Link>
       </Navigation>
 
-      <Actions>
-        <Link to='/login'>
-          <ActionsButton>Login</ActionsButton>
-        </Link>
-        <Link to='/registration'>
-          <ActionsButton>Sign Up</ActionsButton>
-        </Link>
-      </Actions>
+      {oUser ? (
+        <Actions>
+          <ActionsButton onClick={handleLogout}>Logout</ActionsButton>
+        </Actions>
+      ) : (
+        <Actions>
+          <Link to='/login' style={{ marginRight: '20px' }}>
+            <ActionsButton>Login</ActionsButton>
+          </Link>
+          <Link to='/registration'>
+            <ActionsButton>Sign Up</ActionsButton>
+          </Link>
+        </Actions>
+      )}
     </header>
   );
 };
@@ -43,6 +73,18 @@ const Header = () => {
 const Logo = styled.span`
   font-weight: 700;
   font-size: 36px;
+  line-height: 40px;
+  color: #ffffff;
+  transition: 0.2s;
+
+  :hover {
+    color: #bb6df3;
+  }
+`;
+
+const Username = styled.span`
+  font-weight: 700;
+  font-size: 24px;
   line-height: 40px;
   color: #ffffff;
   transition: 0.2s;
@@ -75,8 +117,7 @@ const NavigationLink = styled.span`
 
 const Actions = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 282px;
+  justify-content: flex-end;
 `;
 
 const ActionsButton = styled.button`

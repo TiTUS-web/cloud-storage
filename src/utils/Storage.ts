@@ -10,7 +10,7 @@ class Storage {
     localStorage.removeItem(key);
   }
 
-  resetAllData(): void {
+  removeAllData(): void {
     localStorage.clear();
   }
 }

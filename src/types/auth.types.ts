@@ -21,6 +21,11 @@ export type TResponseRegistration = {
   user: TUser;
 };
 
+export type TAuthState = {
+  oUser: TUser | null;
+  isLoggedIn: boolean;
+};
+
 export enum AuthActionTypes {
   REGISTRATION = 'REGISTRATION',
   LOGIN = 'LOGIN',

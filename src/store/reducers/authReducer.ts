@@ -1,7 +1,7 @@
-import { AuthActionTypes } from '@/types/auth.types';
+import { AuthActionTypes, TAuthState } from '@/types/auth.types';
 import { ActionReducer } from '@/types/store.types';
 
-const defaultState = {
+const defaultState: TAuthState = {
   oUser: null,
   isLoggedIn: false,
 };

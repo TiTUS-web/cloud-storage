@@ -1,3 +1,4 @@
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -6,7 +7,7 @@ import Tile from './components/Tile';
 
 import Files from '@/api/Files';
 
-import { search, add, upload, tile, table } from '@/images';
+import { add, upload, tile, table } from '@/images';
 import { FilesActionTypes } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
@@ -18,6 +19,8 @@ function Pagination() {
 const MyFiles = () => {
   const dispatch = useDispatch();
   const oFiles = new Files();
+
+  const [sSearchFileName, setSearchFilename] = useState('');
 
   const handleFilesDisplayMode = (sDisplayMode: string) => {
     dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
@@ -34,7 +37,6 @@ const MyFiles = () => {
     oFiles
       .getFiles()
       .then((arFiles) => {
-        if (!arFiles) return;
         dispatch({
           type: FilesActionTypes.SET_FILES,
           payload: arFiles,
@@ -54,11 +56,13 @@ const MyFiles = () => {
             style={{ justifyContent: 'space-between', alignItems: 'center' }}
           >
             <Block style={{ width: '530px' }}>
-              <SearchInput placeholder='Enter a file name and press Enter' />
-              <SearchButton disabled={bFilesNotFound}>
-                <IconButton src={search} alt='search'></IconButton>
-                Search
-              </SearchButton>
+              <SearchInput
+                onChange={(event: Event | any) =>
+                  setSearchFilename(event.target.value)
+                }
+                type='text'
+                placeholder='Enter a file name and press Enter'
+              />
             </Block>
 
             {!bFilesNotFound && (
@@ -94,7 +98,11 @@ const MyFiles = () => {
           </Block>
         </Header>
 
-        {sFilesDisplayMode === 'table' ? <Table /> : <Tile />}
+        {sFilesDisplayMode === 'table' ? (
+          <Table searchFileName={sSearchFileName} />
+        ) : (
+          <Tile searchFileName={sSearchFileName} />
+        )}
 
         <Footer>{sFilesDisplayMode && <Pagination />}</Footer>
       </Container>
@@ -142,24 +150,7 @@ const SearchInput = styled.input`
   border-radius: 4px;
   outline: none;
   border: none;
-`;
-
-const SearchButton = styled.button`
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 17px;
-  color: #ffffff;
-  padding: 11px 26px 12px;
-  background: #455b66;
-  border-radius: 4px;
-  margin-right: 19px;
-  display: flex;
-  align-items: center;
-  transition: 0.2s;
-
-  :hover {
-    opacity: 0.8;
-  }
+  margin-right: 10px;
 `;
 
 const AddButton = styled.button`

@@ -3,6 +3,7 @@ import { FilesActionReducer } from '@/types/store.types';
 
 const defaultState: TFilesState = {
   sFilesDisplayMode: 'table',
+
   arFiles: [],
   bFilesNotFound: true,
 };

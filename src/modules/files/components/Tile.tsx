@@ -1,33 +1,57 @@
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { folder } from '@/images';
-import { TFile } from '@/types/files.types';
+import { TDisplayProps, TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
-const Tile = () => {
-  const arFiles = useSelector((state: IState) => state.files.arFiles);
-  const bFilesNotFound = useSelector(
+const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
+  const arFiles: [] = useSelector((state: IState) => state.files.arFiles);
+  const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
+
+  useEffect(() => {
+    handleArFiles();
+  });
+
+  const handleArFiles = () => {
+    const arFilteredFiles: never[] = arFiles.filter((oFile: TFile): boolean => {
+      if (searchFileName === '') {
+        return true;
+      } else if (
+        oFile.name.toLowerCase().includes(searchFileName.toLowerCase())
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    if (arFilteredFiles.length === 0) {
+      return <SearchNotFound>No files were found</SearchNotFound>;
+    }
+
+    return arFilteredFiles.map((oFile: TFile) => (
+      <Block key={oFile.id}>
+        <FileIcon src={folder}></FileIcon>
+        <FileName>{oFile.name}</FileName>
+      </Block>
+    ));
+  };
 
   if (bFilesNotFound) {
     return (
       <FilesNotFound>
-        No files were found. You can create a file by clicking "Add Folder"
+        No files were found. You can create a folder by clicking "Add Folder"
       </FilesNotFound>
     );
   }
+
   return (
     <div className='tile' style={{ margin: '50px' }}>
-      <Container>
-        {arFiles.map((oFile: TFile) => (
-          <Block key={oFile.id}>
-            <FileIcon src={folder}></FileIcon>
-            <FileName>{oFile.name}</FileName>
-          </Block>
-        ))}
-      </Container>
+      <Container>{handleArFiles()}</Container>
     </div>
   );
 };
@@ -48,6 +72,19 @@ const FilesNotFound = styled.div`
   transition: 0.2s;
   text-align: center;
   margin: 50px 0;
+`;
+
+const SearchNotFound = styled.div`
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  color: rgba(46, 59, 82, 0.33);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  text-align: center;
+  margin: 0 auto;
 `;
 
 const Block = styled.div`
@@ -75,4 +112,4 @@ const FileName = styled.p`
   text-align: center;
 `;
 
-export default Tile;
+export default React.memo(Tile);

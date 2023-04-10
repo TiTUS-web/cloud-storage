@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -9,20 +10,75 @@ import {
   accessDelete,
 } from '@/images';
 
-import { TFile } from '@/types/files.types';
+import { TFile, TDisplayProps } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
 
-const Table = () => {
-  const arFiles = useSelector((state: IState) => state.files.arFiles);
-  const bFilesNotFound = useSelector(
+const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
+  const arFiles: [] = useSelector((state: IState) => state.files.arFiles);
+  const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
+
+  useEffect(() => {
+    handleArFiles();
+  });
+
+  const handleArFiles = () => {
+    const arFilteredFiles: never[] = arFiles.filter((oFile: TFile): boolean => {
+      if (searchFileName === '') {
+        return true;
+      } else if (
+        oFile.name.toLowerCase().includes(searchFileName.toLowerCase())
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    if (arFilteredFiles.length === 0) {
+      return (
+        <Tr>
+          <Td center>—</Td>
+          <Td>—</Td>
+          <Td>—</Td>
+          <Td center>—</Td>
+          <Td center>—</Td>
+          <Td center>—</Td>
+          <Td center>—</Td>
+        </Tr>
+      );
+    }
+
+    return arFilteredFiles.map((oFile: TFile) => (
+      <Tr key={oFile.id}>
+        <Td center>
+          <CheckBox type='checkbox' />
+        </Td>
+        <Td>
+          <Type src={typeImg} alt='img' />
+        </Td>
+        <Td>{oFile.name}</Td>
+        <Td center>{oFile.createdAt}</Td>
+        <Td center>{oFile.size}</Td>
+        <Td center>
+          {/* Access controls also help to prevent accidental deletion or modification of files, which could lead to data loss or damage. */}
+          <Access>public</Access>
+        </Td>
+        <Td center>
+          <Action src={accessView} alt='view' />
+          <Action src={accessDelete} alt='delete' />
+          <Action src={accessEdit} alt='edit' />
+        </Td>
+      </Tr>
+    ));
+  };
 
   if (bFilesNotFound) {
     return (
       <FilesNotFound>
-        No files were found. You can create a file by clicking "Add Folder"
+        No files were found. You can create a folder by clicking "Add Folder"
       </FilesNotFound>
     );
   }
@@ -52,29 +108,7 @@ const Table = () => {
           </Th>
         </Tr>
       </Head>
-      <Body>
-        {arFiles.map((oFile: TFile) => (
-          <Tr key={oFile.id}>
-            <Td center>
-              <CheckBox type='checkbox' />
-            </Td>
-            <Td>
-              <Type src={typeImg} alt='img' />
-            </Td>
-            <Td>{oFile.name}</Td>
-            <Td center>{oFile.createdAt}</Td>
-            <Td center>{oFile.size}</Td>
-            <Td center>
-              <Access>public</Access>
-            </Td>
-            <Td center>
-              <Action src={accessView} alt='view' />
-              <Action src={accessDelete} alt='delete' />
-              <Action src={accessEdit} alt='edit' />
-            </Td>
-          </Tr>
-        ))}
-      </Body>
+      <Body>{handleArFiles()}</Body>
     </table>
   );
 };
@@ -177,4 +211,4 @@ const Tr = styled.tr`
   }
 `;
 
-export default Table;
+export default React.memo(Table);

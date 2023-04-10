@@ -21,8 +21,11 @@ export type TFile = {
   accessLink: null;
 };
 
+export type TDisplayProps = {
+  searchFileName: string;
+};
+
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
-
   SET_FILES = 'SET_FILES',
 }

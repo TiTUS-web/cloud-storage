@@ -4,6 +4,7 @@ import accessDelete from '@/assets/icons/access-delete.svg';
 import accessEdit from '@/assets/icons/access-edit.svg';
 import accessView from '@/assets/icons/access-view.svg';
 import add from '@/assets/icons/add.svg';
+import close from '@/assets/icons/close.svg';
 import document from '@/assets/icons/document.svg';
 import folder from '@/assets/icons/folder.svg';
 import left from '@/assets/icons/left.svg';
@@ -35,4 +36,5 @@ export {
   folder,
   table,
   tile,
+  close,
 };

@@ -13,6 +13,19 @@ class Files {
     },
   };
 
+  createFolder(oFolder: TFile) {
+    return new Promise((resolve, reject): void => {
+      API.post('/files', oFolder, this.oConfigAxios)
+        .then((oResponse: AxiosResponse<any, TFile[]>) => {
+          resolve(oResponse.data.name);
+        })
+        .catch((oErr): void => {
+          console.log(oErr);
+          reject(oErr);
+        });
+    });
+  }
+
   getFiles() {
     return new Promise((resolve, reject) => {
       API.get('/files', this.oConfigAxios)

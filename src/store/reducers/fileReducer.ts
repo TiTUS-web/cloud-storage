@@ -3,9 +3,15 @@ import { FilesActionReducer } from '@/types/store.types';
 
 const defaultState: TFilesState = {
   sFilesDisplayMode: 'table',
+  oCurrentPosition: {
+    path: '/',
+    parentId: null,
+  },
 
   arFiles: [],
   bFilesNotFound: true,
+
+  bShowCreateFolderModal: false,
 };
 
 export default function fileReducer(
@@ -23,6 +29,11 @@ export default function fileReducer(
         ...state,
         arFiles: action.payload,
         bFilesNotFound: action.payload.length === 0,
+      };
+    case FilesActionTypes.SHOW_CREATE_FOLDER_MODAL:
+      return {
+        ...state,
+        bShowCreateFolderModal: action.payload,
       };
     default:
       return state;

@@ -63,7 +63,7 @@ const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
         <Td center>{oFile.size}</Td>
         <Td center>
           {/* Access controls also help to prevent accidental deletion or modification of files, which could lead to data loss or damage. */}
-          <Access>public</Access>
+          <Access>{oFile.access}</Access>
         </Td>
         <Td center>
           <Action src={accessView} alt='view' />

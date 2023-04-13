@@ -1,31 +1,43 @@
 export type TFilesState = {
   sFilesDisplayMode: string;
+  oCurrentPosition: {
+    path: string;
+    parentId: number | null;
+  };
 
   arFiles: [];
   bFilesNotFound: boolean;
+
+  bShowCreateFolderModal: boolean;
 };
 
 export type TFile = {
-  size: number;
+  size?: number;
   path: string;
-  date: string;
-  childIds: number[] | [];
-  id: number;
+  date?: string;
+  childIds?: number[] | [];
+  id?: number;
   name: string;
   type: string;
   format: string;
   userId: number;
   parentId: number | null;
-  updatedAt: string;
-  createdAt: string;
-  accessLink: null;
+  updatedAt?: string;
+  createdAt?: string;
+  access: string;
 };
 
 export type TDisplayProps = {
   searchFileName: string;
 };
 
+export type TCurrentPosition = {
+  path: string;
+  parentId: number | null;
+};
+
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
+  SHOW_CREATE_FOLDER_MODAL = 'SHOW_CREATE_FOLDER_MODAL',
 }

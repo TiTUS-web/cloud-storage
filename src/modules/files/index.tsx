@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
 import Table from './components/Table';
@@ -17,13 +18,20 @@ function Pagination() {
 }
 
 const MyFiles = () => {
-  const dispatch = useDispatch();
-  const oFiles = new Files();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
+  const oFiles: Files = new Files();
 
   const [sSearchFileName, setSearchFilename] = useState('');
 
   const handleFilesDisplayMode = (sDisplayMode: string) => {
     dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
+  };
+
+  const handleCreateFolderModal = () => {
+    dispatch({
+      type: FilesActionTypes.SHOW_CREATE_FOLDER_MODAL,
+      payload: true,
+    });
   };
 
   const sFilesDisplayMode = useSelector(
@@ -42,7 +50,10 @@ const MyFiles = () => {
           payload: arFiles,
         });
       })
-      .catch();
+      .catch((oErr) => {
+        // TODO make a notifyMessage component
+        console.log(oErr);
+      });
   }, []);
 
   getFiles();
@@ -92,10 +103,10 @@ const MyFiles = () => {
             )}
 
             <Block>
-              <AddButton>
+              <CreateButton onClick={handleCreateFolderModal}>
                 <IconButton src={add} alt='add'></IconButton>
-                Add Folder
-              </AddButton>
+                Create Folder
+              </CreateButton>
               <UploadButton>
                 <IconButton
                   disabled={bFilesNotFound}
@@ -163,7 +174,7 @@ const SearchInput = styled.input`
   margin-right: 10px;
 `;
 
-const AddButton = styled.button`
+const CreateButton = styled.button`
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;

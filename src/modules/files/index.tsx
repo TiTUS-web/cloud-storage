@@ -33,7 +33,7 @@ const MyFiles = () => {
     (state: IState) => state.files.bFilesNotFound,
   );
 
-  const getFiles = () => {
+  const getFiles = useCallback(() => {
     oFiles
       .getFiles()
       .then((arFiles) => {
@@ -43,7 +43,7 @@ const MyFiles = () => {
         });
       })
       .catch();
-  };
+  }, []);
 
   getFiles();
 
@@ -53,20 +53,21 @@ const MyFiles = () => {
       <Container>
         <Header>
           <Block
-            style={{ justifyContent: 'space-between', alignItems: 'center' }}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
-            <Block style={{ width: '530px' }}>
-              <SearchInput
-                onChange={(event: Event | any) =>
-                  setSearchFilename(event.target.value)
-                }
-                type='text'
-                placeholder='Enter a file name and press Enter'
-              />
-            </Block>
-
             {!bFilesNotFound && (
-              <Block>
+              <Block
+                style={{
+                  marginLeft: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '60%',
+                }}
+              >
                 <IconButton
                   disabled={bFilesNotFound}
                   src={tile}
@@ -78,6 +79,15 @@ const MyFiles = () => {
                   onClick={() => handleFilesDisplayMode('table')}
                   alt='table'
                 ></IconButton>
+
+                <SearchInput
+                  onChange={(event: Event | any) =>
+                    setSearchFilename(event.target.value)
+                  }
+                  style={{ width: '100%' }}
+                  type='text'
+                  placeholder='Enter a file name and press Enter'
+                />
               </Block>
             )}
 

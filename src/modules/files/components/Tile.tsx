@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useDeferredValue, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -12,16 +12,15 @@ const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
     (state: IState) => state.files.bFilesNotFound,
   );
 
-  useEffect(() => {
-    handleArFiles();
-  });
-
-  const handleArFiles = () => {
+  const sDeferredSearchFileName: string = useDeferredValue(searchFileName);
+  const getSearchedFiles: JSX.Element | JSX.Element[] = useMemo(():
+    | JSX.Element
+    | JSX.Element[] => {
     const arFilteredFiles: never[] = arFiles.filter((oFile: TFile): boolean => {
-      if (searchFileName === '') {
+      if (sDeferredSearchFileName === '') {
         return true;
       } else if (
-        oFile.name.toLowerCase().includes(searchFileName.toLowerCase())
+        oFile.name.toLowerCase().includes(sDeferredSearchFileName.toLowerCase())
       ) {
         return true;
       } else {
@@ -39,7 +38,7 @@ const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
         <FileName>{oFile.name}</FileName>
       </Block>
     ));
-  };
+  }, [sDeferredSearchFileName, arFiles]);
 
   if (bFilesNotFound) {
     return (
@@ -51,7 +50,7 @@ const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
 
   return (
     <div className='tile' style={{ margin: '50px' }}>
-      <Container>{handleArFiles()}</Container>
+      <Container>{getSearchedFiles}</Container>
     </div>
   );
 };

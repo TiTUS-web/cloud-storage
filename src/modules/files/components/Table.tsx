@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useDeferredValue } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -20,16 +20,15 @@ const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
     (state: IState) => state.files.bFilesNotFound,
   );
 
-  useEffect(() => {
-    handleArFiles();
-  });
-
-  const handleArFiles = () => {
+  const sDeferredSearchFileName: string = useDeferredValue(searchFileName);
+  const getSearchedFiles: JSX.Element | JSX.Element[] = useMemo(():
+    | JSX.Element
+    | JSX.Element[] => {
     const arFilteredFiles: never[] = arFiles.filter((oFile: TFile): boolean => {
-      if (searchFileName === '') {
+      if (sDeferredSearchFileName === '') {
         return true;
       } else if (
-        oFile.name.toLowerCase().includes(searchFileName.toLowerCase())
+        oFile.name.toLowerCase().includes(sDeferredSearchFileName.toLowerCase())
       ) {
         return true;
       } else {
@@ -73,7 +72,7 @@ const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
         </Td>
       </Tr>
     ));
-  };
+  }, [sDeferredSearchFileName, arFiles]);
 
   if (bFilesNotFound) {
     return (
@@ -108,7 +107,7 @@ const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
           </Th>
         </Tr>
       </Head>
-      <Body>{handleArFiles()}</Body>
+      <Body>{getSearchedFiles}</Body>
     </table>
   );
 };

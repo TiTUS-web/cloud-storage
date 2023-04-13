@@ -33,7 +33,7 @@ const MyFiles = () => {
     (state: IState) => state.files.bFilesNotFound,
   );
 
-  const getFiles = () => {
+  const getFiles = useCallback(() => {
     oFiles
       .getFiles()
       .then((arFiles) => {
@@ -43,7 +43,7 @@ const MyFiles = () => {
         });
       })
       .catch();
-  };
+  }, []);
 
   getFiles();
 

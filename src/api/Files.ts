@@ -13,9 +13,9 @@ class Files {
     },
   };
 
-  createFolder(oFolder: TFile) {
+  createDir(oDir: TFile) {
     return new Promise((resolve, reject): void => {
-      API.post('/files', oFolder, this.oConfigAxios)
+      API.post('/files', oDir, this.oConfigAxios)
         .then((oResponse: AxiosResponse<any, TFile[]>) => {
           resolve(oResponse.data.name);
         })

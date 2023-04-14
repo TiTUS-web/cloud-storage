@@ -77,7 +77,7 @@ const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
   if (bFilesNotFound) {
     return (
       <FilesNotFound>
-        No files were found. You can create a folder by clicking "Add Folder"
+        No files were found. You can create a dir by clicking "Add Directory"
       </FilesNotFound>
     );
   }

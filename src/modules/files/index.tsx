@@ -27,9 +27,9 @@ const MyFiles = () => {
     dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
   };
 
-  const handleCreateFolderModal = () => {
+  const handleCreateDirModal = () => {
     dispatch({
-      type: FilesActionTypes.SHOW_CREATE_FOLDER_MODAL,
+      type: FilesActionTypes.SHOW_CREATE_DIR_MODAL,
       payload: true,
     });
   };
@@ -103,9 +103,9 @@ const MyFiles = () => {
             )}
 
             <Block>
-              <CreateButton onClick={handleCreateFolderModal}>
+              <CreateButton onClick={handleCreateDirModal}>
                 <IconButton src={add} alt='add'></IconButton>
-                Create Folder
+                Create Directory
               </CreateButton>
               <UploadButton>
                 <IconButton

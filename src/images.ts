@@ -5,8 +5,8 @@ import accessEdit from '@/assets/icons/access-edit.svg';
 import accessView from '@/assets/icons/access-view.svg';
 import add from '@/assets/icons/add.svg';
 import close from '@/assets/icons/close.svg';
+import dir from '@/assets/icons/dir.svg';
 import document from '@/assets/icons/document.svg';
-import folder from '@/assets/icons/folder.svg';
 import left from '@/assets/icons/left.svg';
 import right from '@/assets/icons/right.svg';
 import search from '@/assets/icons/search.svg';
@@ -33,7 +33,7 @@ export {
   left,
   right,
   document,
-  folder,
+  dir,
   table,
   tile,
   close,

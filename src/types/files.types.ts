@@ -8,7 +8,7 @@ export type TFilesState = {
   arFiles: [];
   bFilesNotFound: boolean;
 
-  bShowCreateFolderModal: boolean;
+  bShowCreateDirModal: boolean;
 };
 
 export type TFile = {
@@ -39,5 +39,5 @@ export type TCurrentPosition = {
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
-  SHOW_CREATE_FOLDER_MODAL = 'SHOW_CREATE_FOLDER_MODAL',
+  SHOW_CREATE_DIR_MODAL = 'SHOW_CREATE_DIR_MODAL',
 }

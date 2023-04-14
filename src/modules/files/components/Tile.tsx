@@ -2,7 +2,7 @@ import React, { useDeferredValue, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { folder } from '@/images';
+import { dir } from '@/images';
 import { TDisplayProps, TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
@@ -34,7 +34,7 @@ const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
 
     return arFilteredFiles.map((oFile: TFile) => (
       <Block key={oFile.id}>
-        <FileIcon src={folder}></FileIcon>
+        <FileIcon src={dir}></FileIcon>
         <FileName>{oFile.name}</FileName>
       </Block>
     ));
@@ -43,7 +43,7 @@ const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
   if (bFilesNotFound) {
     return (
       <FilesNotFound>
-        No files were found. You can create a folder by clicking "Add Folder"
+        No files were found. You can create a directory by clicking "Add Folder"
       </FilesNotFound>
     );
   }

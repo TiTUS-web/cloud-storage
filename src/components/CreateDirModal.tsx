@@ -9,7 +9,7 @@ import { FilesActionTypes, TCurrentPosition, TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
-const CreateFolderModal = () => {
+const CreateDirModal = () => {
   const oStorage: Storage = new Storage();
   const dispatch: Dispatch<AnyAction> = useDispatch();
   const oFiles: Files = new Files();
@@ -19,38 +19,38 @@ const CreateFolderModal = () => {
     (state: IState) => state.files.oCurrentPosition,
   );
 
-  const [sNameFolder, setNameFolder] = useState('');
-  const [sAccessFolder, setAccessFolder] = useState('public');
+  const [sNameDir, setNameDir] = useState('');
+  const [sAccessDir, setAccessDir] = useState('public');
 
-  const handleSelectAccess = (sAccessFolder: string) => {
-    setAccessFolder(sAccessFolder);
+  const handleSelectAccess = (sAccessDir: string) => {
+    setAccessDir(sAccessDir);
   };
 
-  const handleCreateFolderModal = () => {
+  const handleCreateDirModal = () => {
     dispatch({
-      type: FilesActionTypes.SHOW_CREATE_FOLDER_MODAL,
+      type: FilesActionTypes.SHOW_CREATE_DIR_MODAL,
       payload: false,
     });
   };
 
-  const handleCreateFolder = () => {
-    if (!sNameFolder) {
+  const handleCreateDir = () => {
+    if (!sNameDir) {
       // TODO make a notifyMessage component
       return;
     }
 
-    const oFolder: TFile = {
-      name: sNameFolder,
+    const oDir: TFile = {
+      name: sNameDir,
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
       path: oCurrentPosition.path,
       parentId: oCurrentPosition.parentId,
-      access: sAccessFolder,
+      access: sAccessDir,
     };
 
     oFiles
-      .createFolder(oFolder)
+      .createDir(oDir)
       .then((sFileName) => {
         // sFileName must be passed to notifyMessage
         // TODO make a notifyMessage component
@@ -60,25 +60,25 @@ const CreateFolderModal = () => {
         console.log(oErr);
       });
 
-    handleCreateFolderModal();
+    handleCreateDirModal();
   };
 
   return (
     <Background>
       <Modal>
-        <Title>Create folder</Title>
-        <Close onClick={handleCreateFolderModal} src={close} />
+        <Title>Create directory</Title>
+        <Close onClick={handleCreateDirModal} src={close} />
 
         <Block>
           <Label>Name</Label>
           <Input
-            onChange={(event: Event | any) => setNameFolder(event.target.value)}
+            onChange={(event: Event | any) => setNameDir(event.target.value)}
           />
         </Block>
         <Block>
           <Label>New Access</Label>
           <Select
-            value={sAccessFolder}
+            value={sAccessDir}
             onChange={(event: Event | any) =>
               handleSelectAccess(event.target.value)
             }
@@ -90,13 +90,13 @@ const CreateFolderModal = () => {
         <Block>
           <Label>Path</Label>
           <Input
-            value={oCurrentPosition.path + sNameFolder}
+            value={oCurrentPosition.path + sNameDir}
             type='text'
             readOnly
           />
         </Block>
 
-        <CreateButton onClick={handleCreateFolder}>
+        <CreateButton onClick={handleCreateDir}>
           <IconButton src={add} alt='add'></IconButton>
           Create
         </CreateButton>
@@ -215,4 +215,4 @@ const CreateButton = styled.button`
     opacity: 0.8;
   }
 `;
-export default CreateFolderModal;
+export default CreateDirModal;

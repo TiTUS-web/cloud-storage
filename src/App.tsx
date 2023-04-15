@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import CreateFolderModal from '@/components/CreateFolderModal';
+import CreateDirModal from '@/components/CreateDirModal';
 import Header from '@/components/Header';
 
 import { background, backgroundFull } from '@/images';
@@ -18,8 +18,8 @@ import { IState } from '@/types/store.types';
 function App() {
   const location = useLocation();
 
-  const bShowCreateFolderModal: boolean = useSelector(
-    (state: IState) => state.files.bShowCreateFolderModal,
+  const bShowCreateDirModal: boolean = useSelector(
+    (state: IState) => state.files.bShowCreateDirModal,
   );
 
   return (
@@ -33,7 +33,7 @@ function App() {
         height: '100%',
       }}
     >
-      {bShowCreateFolderModal && <CreateFolderModal />}
+      {bShowCreateDirModal && <CreateDirModal />}
 
       <Wrapper>
         <Header />

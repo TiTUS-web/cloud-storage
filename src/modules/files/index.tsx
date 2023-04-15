@@ -23,21 +23,10 @@ const MyFiles = () => {
 
   const [sSearchFileName, setSearchFilename] = useState('');
 
-  const handleFilesDisplayMode = (sDisplayMode: string) => {
-    dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
-  };
-
-  const handleCreateFolderModal = () => {
-    dispatch({
-      type: FilesActionTypes.SHOW_CREATE_FOLDER_MODAL,
-      payload: true,
-    });
-  };
-
-  const sFilesDisplayMode = useSelector(
+  const sFilesDisplayMode: string = useSelector(
     (state: IState) => state.files.sFilesDisplayMode,
   );
-  const bFilesNotFound = useSelector(
+  const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
 
@@ -55,6 +44,30 @@ const MyFiles = () => {
         console.log(oErr);
       });
   }, []);
+
+  const handleFilesDisplayMode = (sDisplayMode: string) => {
+    dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
+  };
+
+  const handleCreateDirModal = () => {
+    dispatch({
+      type: FilesActionTypes.SHOW_CREATE_DIR_MODAL,
+      payload: true,
+    });
+  };
+
+  const handleDeleteFile = (iFileId: number): void => {
+    oFiles
+      .deleteFile(iFileId)
+      .then((sFileName) => {
+        // TODO make a notifyMessage component
+        getFiles();
+      })
+      .catch((oErr) => {
+        // TODO make a notifyMessage component
+        console.log(oErr);
+      });
+  };
 
   getFiles();
 
@@ -103,9 +116,9 @@ const MyFiles = () => {
             )}
 
             <Block>
-              <CreateButton onClick={handleCreateFolderModal}>
+              <CreateButton onClick={handleCreateDirModal}>
                 <IconButton src={add} alt='add'></IconButton>
-                Create Folder
+                Create Directory
               </CreateButton>
               <UploadButton>
                 <IconButton
@@ -120,9 +133,15 @@ const MyFiles = () => {
         </Header>
 
         {sFilesDisplayMode === 'table' ? (
-          <Table searchFileName={sSearchFileName} />
+          <Table
+            handleDeleteFile={handleDeleteFile}
+            searchFileName={sSearchFileName}
+          />
         ) : (
-          <Tile searchFileName={sSearchFileName} />
+          <Tile
+            handleDeleteFile={handleDeleteFile}
+            searchFileName={sSearchFileName}
+          />
         )}
 
         <Footer>{sFilesDisplayMode && <Pagination />}</Footer>

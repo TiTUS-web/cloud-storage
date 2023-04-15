@@ -16,11 +16,10 @@ class Files {
   createDir(oDir: TFile) {
     return new Promise((resolve, reject): void => {
       API.post('/files', oDir, this.oConfigAxios)
-        .then((oResponse: AxiosResponse<any, TFile[]>) => {
+        .then((oResponse: AxiosResponse<any, TFile>) => {
           resolve(oResponse.data.name);
         })
         .catch((oErr): void => {
-          console.log(oErr);
           reject(oErr);
         });
     });
@@ -33,6 +32,18 @@ class Files {
           resolve(oResponse.data);
         })
         .catch((oErr) => {
+          reject(oErr);
+        });
+    });
+  }
+
+  deleteFile(iFileId: number) {
+    return new Promise((resolve, reject) => {
+      API.delete(`/files/delete/${iFileId}`, this.oConfigAxios)
+        .then((oResponse: AxiosResponse<any, string>) => {
+          resolve(oResponse.data);
+        })
+        .catch((oErr): void => {
           reject(oErr);
         });
     });

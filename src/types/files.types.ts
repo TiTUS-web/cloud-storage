@@ -29,6 +29,7 @@ export type TFile = {
 
 export type TDisplayProps = {
   searchFileName: string;
+  handleDeleteFile: Function;
 };
 
 export type TCurrentPosition = {

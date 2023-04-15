@@ -2,6 +2,7 @@ import React, { useMemo, useDeferredValue } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import Files from '@/api/Files';
 import {
   tableActions,
   typeImg,
@@ -14,7 +15,10 @@ import { TFile, TDisplayProps } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
 
-const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
+const Table: React.FC<TDisplayProps> = ({
+  searchFileName,
+  handleDeleteFile,
+}: TDisplayProps) => {
   const arFiles: [] = useSelector((state: IState) => state.files.arFiles);
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
@@ -67,7 +71,12 @@ const Table: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
         </Td>
         <Td center>
           <Action src={accessView} alt='view' />
-          <Action src={accessDelete} alt='delete' />
+          {/* TODO drop ! after refactoring the backend */}
+          <Action
+            onClick={() => handleDeleteFile(oFile.id!)}
+            src={accessDelete}
+            alt='delete'
+          />
           <Action src={accessEdit} alt='edit' />
         </Td>
       </Tr>
@@ -166,12 +175,9 @@ const Head = styled.thead``;
 const Body = styled.tbody``;
 
 const Th = styled.th`
-  font-weight: bold;
   text-align: ${(props: StyledProps) => (props.center ? 'center' : 'left')};
   border: none;
   padding: 10px 15px;
-  background: #ededed;
-  font-size: 14px;
   border-top: 1px solid #ddd;
   font-weight: 600;
   font-size: 12px;

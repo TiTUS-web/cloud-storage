@@ -7,10 +7,7 @@ import styled from 'styled-components';
 import Auth from '@/api/Auth';
 
 import { AuthActionTypes } from '@/types/auth.types';
-import {
-  emitErrorMessages,
-  emitSuccessMessages,
-} from '@/utils/toastifyActions';
+import { emitErrorMessages } from '@/utils/toastifyActions';
 
 const Login = () => {
   const [email, setEmail] = useState('');

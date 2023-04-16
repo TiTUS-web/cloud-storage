@@ -67,6 +67,7 @@ const MyFiles = () => {
         getFiles();
       })
       .catch((err) => {
+        console.log(err);
         emitErrorMessages(err);
       });
   };

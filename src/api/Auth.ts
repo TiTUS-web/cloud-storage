@@ -28,7 +28,7 @@ class Auth {
           resolve(oResponse.data.user);
         })
         .catch((oErr) => {
-          reject(oErr);
+          reject(oErr.response.data);
         });
     });
   }
@@ -48,7 +48,7 @@ class Auth {
           resolve(oResponse.data.user);
         })
         .catch((oErr) => {
-          reject(oErr);
+          reject(oErr.response.data);
         });
     });
   }

@@ -20,7 +20,7 @@ class Files {
           resolve(oResponse.data.name);
         })
         .catch((oErr): void => {
-          reject(oErr);
+          reject(oErr.response.data);
         });
     });
   }
@@ -32,7 +32,7 @@ class Files {
           resolve(oResponse.data);
         })
         .catch((oErr) => {
-          reject(oErr);
+          reject(oErr.response.data);
         });
     });
   }
@@ -44,7 +44,7 @@ class Files {
           resolve(oResponse.data);
         })
         .catch((oErr): void => {
-          reject(oErr);
+          reject(oErr.response.data);
         });
     });
   }

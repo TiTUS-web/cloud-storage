@@ -2,7 +2,6 @@ import React, { useMemo, useDeferredValue } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import Files from '@/api/Files';
 import {
   tableActions,
   typeImg,

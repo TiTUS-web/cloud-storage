@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Auth from '@/api/Auth';
 import { AuthActionTypes } from '@/types/auth.types';
 import { IState } from '@/types/store.types';
+import { emitSuccessMessages } from '@/utils/toastifyActions';
 
 const Header = () => {
   const oAuth = new Auth();
@@ -19,6 +20,7 @@ const Header = () => {
     dispatch({
       type: AuthActionTypes.LOGOUT,
     });
+    emitSuccessMessages('You have been logged out');
     navigate('/login');
   };
 

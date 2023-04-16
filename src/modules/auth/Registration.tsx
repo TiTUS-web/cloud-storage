@@ -5,6 +5,10 @@ import styled from 'styled-components';
 
 import Auth from '@/api/Auth';
 import { AuthActionTypes } from '@/types/auth.types';
+import {
+  emitErrorMessages,
+  emitSuccessMessages,
+} from '@/utils/toastifyActions';
 
 const Registration = () => {
   const [username, setUsername] = useState('');
@@ -24,11 +28,11 @@ const Registration = () => {
           type: AuthActionTypes.REGISTRATION,
           payload: oUser,
         });
+        emitSuccessMessages('You have successfully registered');
         navigate('/files');
       })
-      .catch((oErr) => {
-        // TODO make a notifyMessage component
-        console.log(oErr);
+      .catch((err) => {
+        emitErrorMessages(err);
       });
   };
 

@@ -1,6 +1,9 @@
 import { useSelector } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import CreateDirModal from '@/components/CreateDirModal';
 import Header from '@/components/Header';
@@ -34,6 +37,7 @@ function App() {
       }}
     >
       {bShowCreateDirModal && <CreateDirModal />}
+      <ToastContainer />
 
       <Wrapper>
         <Header />

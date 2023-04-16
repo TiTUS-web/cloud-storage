@@ -9,6 +9,10 @@ import { FilesActionTypes, TCurrentPosition, TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
+import {
+  emitErrorMessages,
+  emitSuccessMessages,
+} from '@/utils/toastifyActions';
 const CreateDirModal = () => {
   const oStorage: Storage = new Storage();
   const dispatch: Dispatch<AnyAction> = useDispatch();
@@ -35,7 +39,7 @@ const CreateDirModal = () => {
 
   const handleCreateDir = () => {
     if (!sNameDir) {
-      // TODO make a notifyMessage component
+      emitErrorMessages('Specify directory name');
       return;
     }
 
@@ -52,12 +56,13 @@ const CreateDirModal = () => {
     oFiles
       .createDir(oDir)
       .then((sFileName) => {
-        // sFileName must be passed to notifyMessage
-        // TODO make a notifyMessage component
+        // TODO execute getFiles when creating a folder
+        emitSuccessMessages(
+          `Directory "${sFileName}" was successfully created`,
+        );
       })
-      .catch((oErr) => {
-        // TODO make a notifyMessage component
-        console.log(oErr);
+      .catch((err) => {
+        emitErrorMessages(err);
       });
 
     handleCreateDirModal();

@@ -12,6 +12,10 @@ import { add, upload, tile, table } from '@/images';
 import { FilesActionTypes } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
+import {
+  emitErrorMessages,
+  emitSuccessMessages,
+} from '@/utils/toastifyActions';
 
 function Pagination() {
   return null;
@@ -39,9 +43,8 @@ const MyFiles = () => {
           payload: arFiles,
         });
       })
-      .catch((oErr) => {
-        // TODO make a notifyMessage component
-        console.log(oErr);
+      .catch((err) => {
+        emitErrorMessages(err);
       });
   }, []);
 
@@ -60,12 +63,11 @@ const MyFiles = () => {
     oFiles
       .deleteFile(iFileId)
       .then((sFileName) => {
-        // TODO make a notifyMessage component
+        emitSuccessMessages(`"${sFileName}" was successfully deleted`);
         getFiles();
       })
-      .catch((oErr) => {
-        // TODO make a notifyMessage component
-        console.log(oErr);
+      .catch((err) => {
+        emitErrorMessages(err);
       });
   };
 

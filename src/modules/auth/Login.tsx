@@ -7,6 +7,10 @@ import styled from 'styled-components';
 import Auth from '@/api/Auth';
 
 import { AuthActionTypes } from '@/types/auth.types';
+import {
+  emitErrorMessages,
+  emitSuccessMessages,
+} from '@/utils/toastifyActions';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -26,9 +30,8 @@ const Login = () => {
         });
         navigate('/files');
       })
-      .catch((oErr) => {
-        // TODO make a notifyMessage component
-        console.log(oErr);
+      .catch((err) => {
+        emitErrorMessages(err);
       });
   };
 

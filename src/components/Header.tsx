@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavigateFunction } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Auth from '@/api/Auth';
@@ -10,10 +10,12 @@ import { IState } from '@/types/store.types';
 import { emitSuccessMessages } from '@/utils/toastifyActions';
 
 const Header = () => {
-  const oAuth = new Auth();
+  const oAuth: Auth = new Auth();
   const oUser = useSelector((state: IState) => state.auth.oUser) || oAuth.oUser;
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
   const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector((state: IState) => state.auth.isLoggedIn);
 
   const handleLogout = () => {
     oAuth.logout();
@@ -46,28 +48,31 @@ const Header = () => {
         <Link to='/info'>
           <NavigationLink>Info</NavigationLink>
         </Link>
-        <Link to='/files'>
-          <NavigationLink>My Files</NavigationLink>
-        </Link>
-        <Link to='/profile'>
-          <NavigationLink>Profile</NavigationLink>
-        </Link>
+        {isLoggedIn && (
+          <>
+            <Link to='/files'>
+              <NavigationLink>My Files</NavigationLink>
+            </Link>
+            <Link to='/profile'>
+              <NavigationLink>Profile</NavigationLink>
+            </Link>
+          </>
+        )}
+        {oUser ? (
+          <Actions>
+            <ActionsButton onClick={handleLogout}>Logout</ActionsButton>
+          </Actions>
+        ) : (
+          <Actions>
+            <Link to='/login' style={{ marginRight: '20px' }}>
+              <ActionsButton>Login</ActionsButton>
+            </Link>
+            <Link to='/registration'>
+              <ActionsButton>Sign Up</ActionsButton>
+            </Link>
+          </Actions>
+        )}
       </Navigation>
-
-      {oUser ? (
-        <Actions>
-          <ActionsButton onClick={handleLogout}>Logout</ActionsButton>
-        </Actions>
-      ) : (
-        <Actions>
-          <Link to='/login' style={{ marginRight: '20px' }}>
-            <ActionsButton>Login</ActionsButton>
-          </Link>
-          <Link to='/registration'>
-            <ActionsButton>Sign Up</ActionsButton>
-          </Link>
-        </Actions>
-      )}
     </header>
   );
 };
@@ -98,8 +103,7 @@ const Username = styled.span`
 
 const Navigation = styled.nav`
   display: flex;
-  justify-content: space-between;
-  width: 280px;
+  align-items: center;
 `;
 
 const NavigationLink = styled.span`
@@ -111,6 +115,7 @@ const NavigationLink = styled.span`
   color: #ffffff;
   transition: 0.2s;
   cursor: pointer;
+  margin-right: 30px;
 
   :hover {
     color: #bb6df3;

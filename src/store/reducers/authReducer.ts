@@ -1,5 +1,8 @@
+import { AxiosResponse } from 'axios';
+
 import { AuthActionTypes, TAuthState } from '@/types/auth.types';
 import { AuthActionReducer } from '@/types/store.types';
+import { TUser } from '@/types/users.types';
 
 const defaultState: TAuthState = {
   oUser: null,
@@ -33,3 +36,24 @@ export default function authReducer(
       return state;
   }
 }
+
+export const login = (oUser: AxiosResponse<any, TUser>) => {
+  return {
+    type: AuthActionTypes.LOGIN,
+    payload: oUser,
+  };
+};
+
+export const registration = (oUser: AxiosResponse<any, TUser>) => {
+  return {
+    type: AuthActionTypes.REGISTRATION,
+    payload: oUser,
+  };
+};
+
+export const logout = () => {
+  return {
+    type: AuthActionTypes.LOGOUT,
+    payload: null,
+  };
+};

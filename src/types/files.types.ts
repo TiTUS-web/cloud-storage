@@ -12,19 +12,28 @@ export type TFilesState = {
 };
 
 export type TFile = {
-  size?: number;
+  size: number;
   path: string;
-  date?: string;
-  childIds?: number[] | [];
-  id?: number;
+  date: string;
+  id: number;
   name: string;
   type: string;
   format: string;
   userId: number;
   parentId: number | null;
-  updatedAt?: string;
-  createdAt?: string;
+  updatedAt: string;
+  createdAt: string;
   access: string;
+};
+
+export type TFileCreation = {
+  name: string;
+  type: string;
+  format: string;
+  access: string;
+  path: string;
+  userId: number;
+  parentId: number | null;
 };
 
 export type TDisplayProps = {
@@ -40,5 +49,5 @@ export type TCurrentPosition = {
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
-  SHOW_CREATE_DIR_MODAL = 'SHOW_CREATE_DIR_MODAL',
+  SET_DISPLAY_CREATE_DIR_MODAL = 'SET_DISPLAY_CREATE_DIR_MODAL',
 }

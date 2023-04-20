@@ -5,7 +5,11 @@ import styled from 'styled-components';
 
 import Files from '@/api/Files';
 import { add, close } from '@/images';
-import { FilesActionTypes, TCurrentPosition, TFile } from '@/types/files.types';
+import {
+  setDisplayCreateDirModal,
+  setFiles,
+} from '@/store/reducers/fileReducer';
+import { TCurrentPosition, TFileCreation } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
@@ -30,11 +34,8 @@ const CreateDirModal = () => {
     setAccessDir(sAccessDir);
   };
 
-  const handleCreateDirModal = () => {
-    dispatch({
-      type: FilesActionTypes.SHOW_CREATE_DIR_MODAL,
-      payload: false,
-    });
+  const handleDisplayCreateDirModal = (sDisplayModal: boolean) => {
+    dispatch(setDisplayCreateDirModal(sDisplayModal));
   };
 
   const handleCreateDir = () => {
@@ -43,36 +44,35 @@ const CreateDirModal = () => {
       return;
     }
 
-    const oDir: TFile = {
+    const oDir: TFileCreation = {
       name: sNameDir,
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: oCurrentPosition.path,
+      path: `/USER ${oUser.id}${oCurrentPosition.path}${sNameDir}`,
       parentId: oCurrentPosition.parentId,
       access: sAccessDir,
     };
 
     oFiles
       .createDir(oDir)
-      .then((sFileName) => {
-        // TODO execute getFiles when creating a folder
+      .then(async (sFileName) => {
         emitSuccessMessages(
           `Directory "${sFileName}" was successfully created`,
         );
+        handleDisplayCreateDirModal(false);
+        dispatch(await setFiles());
       })
       .catch((err) => {
         emitErrorMessages(err);
       });
-
-    handleCreateDirModal();
   };
 
   return (
     <Background>
       <Modal>
         <Title>Create directory</Title>
-        <Close onClick={handleCreateDirModal} src={close} />
+        <Close onClick={() => handleDisplayCreateDirModal(false)} src={close} />
 
         <Block>
           <Label>Name</Label>

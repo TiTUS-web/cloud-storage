@@ -9,7 +9,11 @@ import Tile from './components/Tile';
 import Files from '@/api/Files';
 
 import { add, upload, tile, table } from '@/images';
-import { FilesActionTypes } from '@/types/files.types';
+import {
+  setFiles,
+  setDisplayCreateDirModal,
+  setFilesMode,
+} from '@/store/reducers/fileReducer';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
 import {
@@ -34,30 +38,17 @@ const MyFiles = () => {
     (state: IState) => state.files.bFilesNotFound,
   );
 
-  const getFiles = useCallback(() => {
-    oFiles
-      .getFiles()
-      .then((arFiles) => {
-        dispatch({
-          type: FilesActionTypes.SET_FILES,
-          payload: arFiles,
-        });
-      })
-      .catch((err) => {
-        emitErrorMessages(err);
-      });
+  const handleFilesMode = (sFilesMode: string) => {
+    dispatch(setFilesMode(sFilesMode));
+  };
+
+  const handleDisplayCreateDirModal = (sDisplayModal: boolean) => {
+    dispatch(setDisplayCreateDirModal(sDisplayModal));
+  };
+
+  const getFiles = useCallback(async () => {
+    dispatch(await setFiles());
   }, []);
-
-  const handleFilesDisplayMode = (sDisplayMode: string) => {
-    dispatch({ type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode });
-  };
-
-  const handleCreateDirModal = () => {
-    dispatch({
-      type: FilesActionTypes.SHOW_CREATE_DIR_MODAL,
-      payload: true,
-    });
-  };
 
   const handleDeleteFile = (iFileId: number): void => {
     oFiles
@@ -98,12 +89,12 @@ const MyFiles = () => {
                 <IconButton
                   disabled={bFilesNotFound}
                   src={tile}
-                  onClick={() => handleFilesDisplayMode('tile')}
+                  onClick={() => handleFilesMode('tile')}
                   alt='tile'
                 ></IconButton>
                 <IconButton
                   src={table}
-                  onClick={() => handleFilesDisplayMode('table')}
+                  onClick={() => handleFilesMode('table')}
                   alt='table'
                 ></IconButton>
 
@@ -119,7 +110,7 @@ const MyFiles = () => {
             )}
 
             <Block>
-              <CreateButton onClick={handleCreateDirModal}>
+              <CreateButton onClick={() => handleDisplayCreateDirModal(true)}>
                 <IconButton src={add} alt='add'></IconButton>
                 Create Directory
               </CreateButton>

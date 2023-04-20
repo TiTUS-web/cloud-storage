@@ -1,30 +1,31 @@
-import { useState } from 'react';
+import { AxiosResponse } from 'axios';
+import { Dispatch, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, NavigateFunction } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
 import Auth from '@/api/Auth';
 
-import { AuthActionTypes } from '@/types/auth.types';
+import { login } from '@/store/reducers/authReducer';
+import { TResponseLogin } from '@/types/auth.types';
+import { TUser } from '@/types/users.types';
 import { emitErrorMessages } from '@/utils/toastifyActions';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const oAuth = new Auth();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const oAuth: Auth = new Auth();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
+  const navigate: NavigateFunction = useNavigate();
 
   const handleLogin = () => {
     return oAuth
       .login({ email, password })
-      .then((oUser) => {
-        dispatch({
-          type: AuthActionTypes.LOGIN,
-          payload: oUser,
-        });
+      .then((oUser: AxiosResponse<any, TUser>) => {
+        dispatch(login(oUser));
         navigate('/files');
       })
       .catch((err) => {

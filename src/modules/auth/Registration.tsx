@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { AxiosResponse } from 'axios';
+import { Dispatch, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
 import Auth from '@/api/Auth';
-import { AuthActionTypes } from '@/types/auth.types';
+import { registration } from '@/store/reducers/authReducer';
+import { TUser } from '@/types/users.types';
 import {
   emitErrorMessages,
   emitSuccessMessages,
@@ -15,19 +18,16 @@ const Registration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
-  const oAuth = new Auth();
-  const dispatch = useDispatch();
+  const oAuth: Auth = new Auth();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     oAuth
       .registration({ username, email, password })
-      .then((oUser) => {
-        dispatch({
-          type: AuthActionTypes.REGISTRATION,
-          payload: oUser,
-        });
+      .then((oUser: AxiosResponse<any, TUser>) => {
+        dispatch(registration(oUser));
         emitSuccessMessages('You have successfully registered');
         navigate('/files');
       })

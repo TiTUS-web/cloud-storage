@@ -1,11 +1,13 @@
+import { Dispatch } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
+import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
 import Auth from '@/api/Auth';
-import { AuthActionTypes } from '@/types/auth.types';
+import { logout } from '@/store/reducers/authReducer';
 import { IState } from '@/types/store.types';
 import { emitSuccessMessages } from '@/utils/toastifyActions';
 
@@ -13,15 +15,15 @@ const Header = () => {
   const oAuth: Auth = new Auth();
   const oUser = useSelector((state: IState) => state.auth.oUser) || oAuth.oUser;
   const navigate: NavigateFunction = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const isLoggedIn = useSelector((state: IState) => state.auth.isLoggedIn);
+  const isLoggedIn: boolean = useSelector(
+    (state: IState) => state.auth.isLoggedIn,
+  );
 
   const handleLogout = () => {
     oAuth.logout();
-    dispatch({
-      type: AuthActionTypes.LOGOUT,
-    });
+    dispatch(logout());
     emitSuccessMessages('You have been logged out');
     navigate('/login');
   };

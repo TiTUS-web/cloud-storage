@@ -2,13 +2,7 @@ import React, { useMemo, useDeferredValue } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import {
-  tableActions,
-  typeImg,
-  accessView,
-  accessEdit,
-  accessDelete,
-} from '@/images';
+import { tableActions, typeImg, view, deleteIcon, edit } from '@/images';
 
 import { TFile, TDisplayProps } from '@/types/files.types';
 import { IState } from '@/types/store.types';
@@ -69,13 +63,13 @@ const Table: React.FC<TDisplayProps> = ({
           <Access>{oFile.access}</Access>
         </Td>
         <Td center>
-          <Action src={accessView} alt='view' />
+          <Action src={view} alt='view' />
           <Action
             onClick={() => handleDeleteFile(oFile.id)}
-            src={accessDelete}
+            src={deleteIcon}
             alt='delete'
           />
-          <Action src={accessEdit} alt='edit' />
+          <Action src={edit} alt='edit' />
         </Td>
       </Tr>
     ));

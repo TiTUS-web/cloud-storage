@@ -13,7 +13,7 @@ class Files {
     },
   };
 
-  createDir(oDir: TFileCreation) {
+  createDir(oDir: TFileCreation): Promise<string> {
     return new Promise((resolve, reject): void => {
       API.post('/files', oDir, this.oConfigAxios)
         .then((oResponse: AxiosResponse<any, TFileCreation>) => {
@@ -25,7 +25,7 @@ class Files {
     });
   }
 
-  getFiles() {
+  getFiles(): Promise<TFile[]> {
     return new Promise((resolve, reject) => {
       API.get('/files', this.oConfigAxios)
         .then((oResponse: AxiosResponse<any, TFile[]>) => {
@@ -37,7 +37,7 @@ class Files {
     });
   }
 
-  deleteFile(iFileId: number) {
+  deleteFile(iFileId: number): Promise<string> {
     return new Promise((resolve, reject) => {
       API.delete(`/files/delete/${iFileId}`, this.oConfigAxios)
         .then((oResponse: AxiosResponse<any, string>) => {

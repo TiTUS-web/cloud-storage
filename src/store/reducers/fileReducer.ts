@@ -6,7 +6,7 @@ const oFiles: Files = new Files();
 
 const defaultState: TFilesState = {
   sFilesDisplayMode: 'table',
-  oCurrentPosition: {
+  oCurrentDir: {
     path: '/',
     parentId: null,
   },
@@ -37,6 +37,11 @@ export default function fileReducer(
       return {
         ...state,
         bShowCreateDirModal: action.payload,
+      };
+    case FilesActionTypes.SET_CURRENT_DIR:
+      return {
+        ...state,
+        oCurrentDir: action.payload,
       };
     default:
       return state;

@@ -23,8 +23,8 @@ const CreateDirModal = () => {
   const oFiles: Files = new Files();
 
   const oUser: TUser = oStorage.getData('oUser');
-  const oCurrentPosition: TCurrentPosition = useSelector(
-    (state: IState) => state.files.oCurrentPosition,
+  const oCurrentDir: TCurrentPosition = useSelector(
+    (state: IState) => state.files.oCurrentDir,
   );
 
   const [sNameDir, setNameDir] = useState('');
@@ -49,8 +49,8 @@ const CreateDirModal = () => {
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: `/USER ${oUser.id}${oCurrentPosition.path}${sNameDir}`,
-      parentId: oCurrentPosition.parentId,
+      path: `${oCurrentDir.path}${sNameDir}`,
+      parentId: oCurrentDir.parentId,
       access: sAccessDir,
     };
 
@@ -94,11 +94,7 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input
-            value={oCurrentPosition.path + sNameDir}
-            type='text'
-            readOnly
-          />
+          <Input value={oCurrentDir.path + sNameDir} type='text' readOnly />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

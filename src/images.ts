@@ -1,6 +1,7 @@
 import backgroundFull from '@/assets/background-full.jpg';
 import background from '@/assets/background.jpg';
 import add from '@/assets/icons/add.svg';
+import back from '@/assets/icons/back.svg';
 import close from '@/assets/icons/close.svg';
 import deleteIcon from '@/assets/icons/delete.svg';
 import dir from '@/assets/icons/dir.svg';
@@ -37,4 +38,5 @@ export {
   table,
   tile,
   close,
+  back,
 };

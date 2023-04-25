@@ -19,6 +19,7 @@ import {
 } from '@/store/reducers/fileReducer';
 import { IState } from '@/types/store.types';
 
+import { StyledProps } from '@/types/styled';
 import {
   emitErrorMessages,
   emitSuccessMessages,
@@ -29,6 +30,7 @@ const MyFiles = () => {
   const oFiles: Files = new Files();
 
   const [sSearchFileName, setSearchFilename] = useState('');
+  const [bSearchActive, setSearchActive] = useState(false);
 
   const sFilesDisplayMode: string = useSelector(
     (state: IState) => state.files.sFilesDisplayMode,
@@ -36,6 +38,14 @@ const MyFiles = () => {
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
+
+  const handleFocusSearch = () => {
+    setSearchActive(true);
+  };
+
+  const handleBlurSearch = () => {
+    setSearchActive(false);
+  };
 
   const handleFilesMode = (sFilesMode: string) => {
     dispatch(setFilesMode(sFilesMode));
@@ -92,6 +102,7 @@ const MyFiles = () => {
           <Block>
             <Utils>
               <IconButton
+                bSearchActive={bSearchActive}
                 style={{ marginRight: '10px' }}
                 disabled={bFilesNotFound}
                 src={tile}
@@ -99,21 +110,23 @@ const MyFiles = () => {
                 alt='tile'
               ></IconButton>
               <IconButton
+                bSearchActive={bSearchActive}
                 src={table}
                 onClick={() => handleFilesMode('table')}
                 alt='table'
               ></IconButton>
             </Utils>
-
-            <SearchInputWrapper>
+            <SearchInputWrapper bSearchActive={bSearchActive}>
               <SearchInput
+                onFocus={() => handleFocusSearch()}
+                onBlur={() => handleBlurSearch()}
                 onChange={(event: Event | any) =>
                   setSearchFilename(event.target.value)
                 }
                 type='text'
-                placeholder='Сloud search'
+                placeholder={bSearchActive ? 'Enter file name' : 'Сloud search'}
               />
-              <img src={search} alt='search' />
+              <Icon src={search} alt='search' />
             </SearchInputWrapper>
           </Block>
         </Header>
@@ -130,7 +143,7 @@ const MyFiles = () => {
             searchFileName={sSearchFileName}
           />
         )}
-        <DragAndDrop />
+        {bSearchActive || <DragAndDrop />}
       </Container>
     </section>
   );
@@ -169,11 +182,13 @@ const Utils = styled.div`
 `;
 
 const SearchInputWrapper = styled.div`
+  width: ${(props: StyledProps) => (props.bSearchActive ? '800px' : '185px')};
   padding: 11px 8px 12px 8px;
   background: #dae1ec;
   border-radius: 5px;
   display: flex;
   align-items: center;
+  transition: 0.2s ease-in;
 `;
 
 const SearchInput = styled.input`
@@ -184,6 +199,7 @@ const SearchInput = styled.input`
   color: rgba(46, 59, 82, 0.33);
   outline: none;
   border: none;
+  width: 100%;
 `;
 
 const CreateButton = styled.button`
@@ -227,6 +243,7 @@ const Container = styled.div`
 `;
 
 const IconButton = styled.img`
+  display: ${(props: StyledProps) => (props.bSearchActive ? 'none' : 'block')};
   cursor: pointer;
   width: 20px;
   height: 20px;
@@ -238,4 +255,16 @@ const IconButton = styled.img`
   }
 `;
 
+const Icon = styled.img`
+  display: block;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+
+  transition: 0.2s;
+
+  :hover {
+    opacity: 0.8;
+  }
+`;
 export default MyFiles;

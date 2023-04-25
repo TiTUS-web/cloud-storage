@@ -1,6 +1,6 @@
 export type TFilesState = {
   sFilesDisplayMode: string;
-  oCurrentPosition: {
+  oCurrentDir: {
     path: string;
     parentId: number | null;
   };
@@ -46,8 +46,14 @@ export type TCurrentPosition = {
   parentId: number | null;
 };
 
+export type TCurrentDir = {
+  path: string;
+  parentId: number;
+};
+
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
   SET_DISPLAY_CREATE_DIR_MODAL = 'SET_DISPLAY_CREATE_DIR_MODAL',
+  SET_CURRENT_DIR = 'SET_CURRENT_DIR',
 }

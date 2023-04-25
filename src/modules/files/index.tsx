@@ -8,7 +8,9 @@ import Tile from './components/Tile';
 
 import Files from '@/api/Files';
 
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { add, upload, tile, table } from '@/images';
+import Pagination from '@/modules/files/components/Pagination';
 import {
   setFiles,
   setDisplayCreateDirModal,
@@ -20,10 +22,6 @@ import {
   emitErrorMessages,
   emitSuccessMessages,
 } from '@/utils/toastifyActions';
-
-function Pagination() {
-  return null;
-}
 
 const MyFiles = () => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
@@ -58,7 +56,6 @@ const MyFiles = () => {
         getFiles();
       })
       .catch((err) => {
-        console.log(err);
         emitErrorMessages(err);
       });
   };
@@ -125,7 +122,6 @@ const MyFiles = () => {
             </Block>
           </Block>
         </Header>
-
         {sFilesDisplayMode === 'table' ? (
           <Table
             handleDeleteFile={handleDeleteFile}
@@ -137,8 +133,12 @@ const MyFiles = () => {
             searchFileName={sSearchFileName}
           />
         )}
-
-        <Footer>{sFilesDisplayMode && <Pagination />}</Footer>
+        {sFilesDisplayMode && (
+          <Footer>
+            <Breadcrumbs />
+            <Pagination />
+          </Footer>
+        )}
       </Container>
     </section>
   );

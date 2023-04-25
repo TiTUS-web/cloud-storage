@@ -70,9 +70,8 @@ const Table: React.FC<TDisplayProps> = ({
         </Td>
         <Td center>
           <Action src={accessView} alt='view' />
-          {/* TODO drop ! after refactoring the backend */}
           <Action
-            onClick={() => handleDeleteFile(oFile.id!)}
+            onClick={() => handleDeleteFile(oFile.id)}
             src={accessDelete}
             alt='delete'
           />

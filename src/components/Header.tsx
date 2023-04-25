@@ -51,16 +51,16 @@ const Header = () => {
           <NavigationLink>Info</NavigationLink>
         </Link>
         {isLoggedIn && (
-          <>
-            <Link to='/files'>
-              <NavigationLink>My Files</NavigationLink>
-            </Link>
-            <Link to='/profile'>
-              <NavigationLink>Profile</NavigationLink>
-            </Link>
-          </>
+          <Link to='/files'>
+            <NavigationLink>My Files</NavigationLink>
+          </Link>
         )}
-        {oUser ? (
+        {isLoggedIn && (
+          <Link to='/profile'>
+            <NavigationLink>Profile</NavigationLink>
+          </Link>
+        )}
+        {isLoggedIn ? (
           <Actions>
             <ActionsButton onClick={handleLogout}>Logout</ActionsButton>
           </Actions>

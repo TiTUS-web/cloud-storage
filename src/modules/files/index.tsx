@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
+import DragAndDrop from './components/DragAndDrop';
 import Table from './components/Table';
 import Tile from './components/Tile';
 
@@ -10,13 +11,14 @@ import Files from '@/api/Files';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { add, upload, tile, table } from '@/images';
-import Pagination from '@/modules/files/components/Pagination';
+import { search } from '@/images';
 import {
   setFiles,
   setDisplayCreateDirModal,
   setFilesMode,
 } from '@/store/reducers/fileReducer';
 import { IState } from '@/types/store.types';
+
 import { StyledProps } from '@/types/styled';
 import {
   emitErrorMessages,
@@ -28,6 +30,7 @@ const MyFiles = () => {
   const oFiles: Files = new Files();
 
   const [sSearchFileName, setSearchFilename] = useState('');
+  const [bSearchActive, setSearchActive] = useState(false);
 
   const sFilesDisplayMode: string = useSelector(
     (state: IState) => state.files.sFilesDisplayMode,
@@ -35,6 +38,14 @@ const MyFiles = () => {
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
+
+  const handleFocusSearch = () => {
+    setSearchActive(true);
+  };
+
+  const handleBlurSearch = () => {
+    setSearchActive(false);
+  };
 
   const handleFilesMode = (sFilesMode: string) => {
     dispatch(setFilesMode(sFilesMode));
@@ -64,64 +75,63 @@ const MyFiles = () => {
 
   return (
     <section className='files' style={{ padding: '189px 0px 150px' }}>
-      <Title>My files</Title>
       <Container>
+        <Title>My files</Title>
+
         <Header>
-          <Block
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            {!bFilesNotFound && (
-              <Block
-                style={{
-                  marginLeft: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '60%',
-                }}
+          <Block>
+            <Buttons>
+              <CreateButton
+                onClick={() => handleDisplayCreateDirModal(true)}
+                title='Create Directory'
+                type='button'
               >
-                <IconButton
-                  disabled={bFilesNotFound}
-                  src={tile}
-                  onClick={() => handleFilesMode('tile')}
-                  alt='tile'
-                ></IconButton>
-                <IconButton
-                  src={table}
-                  onClick={() => handleFilesMode('table')}
-                  alt='table'
-                ></IconButton>
-
-                <SearchInput
-                  onChange={(event: Event | any) =>
-                    setSearchFilename(event.target.value)
-                  }
-                  style={{ width: '100%' }}
-                  type='text'
-                  placeholder='Enter a file name and press Enter'
-                />
-              </Block>
-            )}
-
-            <Block>
-              <CreateButton onClick={() => handleDisplayCreateDirModal(true)}>
                 <IconButton src={add} alt='add'></IconButton>
-                Create Directory
               </CreateButton>
-              <UploadButton>
+
+              <UploadButton title='Upload File' type='button'>
                 <IconButton
                   disabled={bFilesNotFound}
                   src={upload}
                   alt='upload'
                 ></IconButton>
-                Upload File
               </UploadButton>
-            </Block>
+            </Buttons>
+          </Block>
+
+          <Block>
+            <Utils>
+              <IconButton
+                bSearchActive={bSearchActive}
+                style={{ marginRight: '10px' }}
+                disabled={bFilesNotFound}
+                src={tile}
+                onClick={() => handleFilesMode('tile')}
+                alt='tile'
+              ></IconButton>
+              <IconButton
+                bSearchActive={bSearchActive}
+                src={table}
+                onClick={() => handleFilesMode('table')}
+                alt='table'
+              ></IconButton>
+            </Utils>
+            <SearchInputWrapper bSearchActive={bSearchActive}>
+              <SearchInput
+                onFocus={() => handleFocusSearch()}
+                onBlur={() => handleBlurSearch()}
+                onChange={(event: Event | any) =>
+                  setSearchFilename(event.target.value)
+                }
+                type='text'
+                placeholder={bSearchActive ? 'Enter file name' : 'Сloud search'}
+              />
+              <Icon src={search} alt='search' />
+            </SearchInputWrapper>
           </Block>
         </Header>
+        {sFilesDisplayMode && <Breadcrumbs />}
+
         {sFilesDisplayMode === 'table' ? (
           <Table
             handleDeleteFile={handleDeleteFile}
@@ -133,12 +143,7 @@ const MyFiles = () => {
             searchFileName={sSearchFileName}
           />
         )}
-        {sFilesDisplayMode && (
-          <Footer>
-            <Breadcrumbs />
-            <Pagination />
-          </Footer>
-        )}
+        {bSearchActive || <DragAndDrop />}
       </Container>
     </section>
   );
@@ -156,35 +161,45 @@ const Title = styled.h2`
 `;
 
 const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
   background: #f4f7fc;
   padding: 10px;
 `;
 
-const Footer = styled.footer`
-  padding: 10px;
-  background: #fff;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  border: 1px solid #ddd;
-`;
-
 const Block = styled.div`
   display: flex;
+  align-items: center;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+`;
+
+const Utils = styled.div`
+  display: flex;
+  margin-right: 15px;
+`;
+
+const SearchInputWrapper = styled.div`
+  width: ${(props: StyledProps) => (props.bSearchActive ? '800px' : '185px')};
+  padding: 11px 8px 12px 8px;
+  background: #dae1ec;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: 0.2s ease-in;
 `;
 
 const SearchInput = styled.input`
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
-  color: rgba(46, 59, 82, 0.33);
-  padding: 11px 0 12px 40px;
-  width: 100%;
   background: #dae1ec;
-  border-radius: 4px;
+  color: rgba(46, 59, 82, 0.33);
   outline: none;
   border: none;
-  margin-right: 10px;
+  width: 100%;
 `;
 
 const CreateButton = styled.button`
@@ -192,10 +207,10 @@ const CreateButton = styled.button`
   font-size: 14px;
   line-height: 17px;
   color: #ffffff;
-  padding: 11px 26px 12px;
+  padding: 11px 15px 12px;
   background: #913e98;
   border-radius: 4px;
-  margin-right: 19px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
   transition: 0.2s;
@@ -210,7 +225,7 @@ const UploadButton = styled.button`
   font-size: 14px;
   line-height: 17px;
   color: #ffffff;
-  padding: 11px 26px 12px;
+  padding: 11px 15px 12px;
   background: #f04438;
   border-radius: 4px;
   display: flex;
@@ -228,11 +243,11 @@ const Container = styled.div`
 `;
 
 const IconButton = styled.img`
+  display: ${(props: StyledProps) => (props.bSearchActive ? 'none' : 'block')};
   cursor: pointer;
   width: 20px;
   height: 20px;
-  margin-right: ${(props: StyledProps) =>
-    props.left || props.right ? '40px' : '10px'};
+
   transition: 0.2s;
 
   :hover {
@@ -240,4 +255,16 @@ const IconButton = styled.img`
   }
 `;
 
+const Icon = styled.img`
+  display: block;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+
+  transition: 0.2s;
+
+  :hover {
+    opacity: 0.8;
+  }
+`;
 export default MyFiles;

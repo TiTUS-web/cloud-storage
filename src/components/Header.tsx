@@ -13,7 +13,6 @@ import { emitSuccessMessages } from '@/utils/toastifyActions';
 
 const Header = () => {
   const oAuth: Auth = new Auth();
-  const oUser = useSelector((state: IState) => state.auth.oUser) || oAuth.oUser;
   const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
@@ -38,29 +37,23 @@ const Header = () => {
         padding: '63px 0',
       }}
     >
-      {oUser ? (
-        <Username>{oUser.username}</Username>
-      ) : (
-        <Link to='/'>
-          <Logo>SkyCloud</Logo>
-        </Link>
-      )}
+      <Logo>SkyCloud</Logo>
 
       <Navigation>
         <Link to='/info'>
           <NavigationLink>Info</NavigationLink>
         </Link>
         {isLoggedIn && (
-          <>
-            <Link to='/files'>
-              <NavigationLink>My Files</NavigationLink>
-            </Link>
-            <Link to='/profile'>
-              <NavigationLink>Profile</NavigationLink>
-            </Link>
-          </>
+          <Link to='/files'>
+            <NavigationLink>My Files</NavigationLink>
+          </Link>
         )}
-        {oUser ? (
+        {isLoggedIn && (
+          <Link to='/profile'>
+            <NavigationLink>Profile</NavigationLink>
+          </Link>
+        )}
+        {isLoggedIn ? (
           <Actions>
             <ActionsButton onClick={handleLogout}>Logout</ActionsButton>
           </Actions>

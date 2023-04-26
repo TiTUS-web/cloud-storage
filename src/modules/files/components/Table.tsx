@@ -1,9 +1,10 @@
-import React, { useMemo, useDeferredValue } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { tableActions, typeImg, view, deleteIcon, edit } from '@/images';
 
+import { useFilterFiles } from '@/modules/files/hooks/useFilterFiles';
 import { TFile, TDisplayProps } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
@@ -13,72 +14,10 @@ const Table: React.FC<TDisplayProps> = ({
   handleDeleteFile,
   handleOpenDir,
 }: TDisplayProps) => {
-  const arFiles: [] = useSelector((state: IState) => state.files.arFiles);
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
-
-  const sDeferredSearchFileName: string = useDeferredValue(searchFileName);
-  const getSearchedFiles: JSX.Element | JSX.Element[] = useMemo(():
-    | JSX.Element
-    | JSX.Element[] => {
-    const arFilteredFiles: TFile[] = arFiles.filter((oFile: TFile): boolean => {
-      if (sDeferredSearchFileName === '') {
-        return true;
-      } else if (
-        oFile.name.toLowerCase().includes(sDeferredSearchFileName.toLowerCase())
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    if (arFilteredFiles.length === 0) {
-      return (
-        <Tr>
-          <Td center>—</Td>
-          <Td>—</Td>
-          <Td>—</Td>
-          <Td center>—</Td>
-          <Td center>—</Td>
-          <Td center>—</Td>
-          <Td center>—</Td>
-        </Tr>
-      );
-    }
-
-    return arFilteredFiles.map((oFile: TFile) => (
-      <Tr key={oFile.id}>
-        <Td center>
-          <CheckBox type='checkbox' />
-        </Td>
-        <Td>
-          <Type src={typeImg} alt='img' />
-        </Td>
-        <Td>{oFile.name}</Td>
-        <Td center>{oFile.createdAt}</Td>
-        <Td center>{oFile.size}</Td>
-        <Td center>
-          {/* Access controls also help to prevent accidental deletion or modification of files, which could lead to data loss or damage. */}
-          <Access>{oFile.access}</Access>
-        </Td>
-        <Td center>
-          <Action
-            onClick={() => handleOpenDir(oFile.type, oFile.path, oFile.id)}
-            src={view}
-            alt='view'
-          />
-          <Action
-            onClick={() => handleDeleteFile(oFile.id)}
-            src={deleteIcon}
-            alt='delete'
-          />
-          <Action src={edit} alt='edit' />
-        </Td>
-      </Tr>
-    ));
-  }, [sDeferredSearchFileName, arFiles]);
+  const arFiles: TFile[] = useFilterFiles(searchFileName);
 
   if (bFilesNotFound) {
     return (
@@ -113,7 +52,38 @@ const Table: React.FC<TDisplayProps> = ({
           </Th>
         </Tr>
       </Head>
-      <Body>{getSearchedFiles}</Body>
+      <Body>
+        {arFiles.map((oFile: TFile) => (
+          <Tr key={oFile.id}>
+            <Td center>
+              <CheckBox type='checkbox' />
+            </Td>
+            <Td>
+              <Type src={typeImg} alt='img' />
+            </Td>
+            <Td>{oFile.name}</Td>
+            <Td center>{oFile.createdAt}</Td>
+            <Td center>{oFile.size}</Td>
+            <Td center>
+              {/* Access controls also help to prevent accidental deletion or modification of files, which could lead to data loss or damage. */}
+              <Access>{oFile.access}</Access>
+            </Td>
+            <Td center>
+              <Action
+                onClick={() => handleOpenDir(oFile.type, oFile.path, oFile.id)}
+                src={view}
+                alt='view'
+              />
+              <Action
+                onClick={() => handleDeleteFile(oFile.id)}
+                src={deleteIcon}
+                alt='delete'
+              />
+              <Action src={edit} alt='edit' />
+            </Td>
+          </Tr>
+        ))}
+      </Body>
     </table>
   );
 };

@@ -166,7 +166,7 @@ const MyFiles = () => {
             searchFileName={sSearchFileName}
           />
         )}
-        {bSearchActive || <DragAndDrop />}
+        <DragAndDrop />
       </Container>
     </section>
   );

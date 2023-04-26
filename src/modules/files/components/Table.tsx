@@ -11,6 +11,7 @@ import { StyledProps } from '@/types/styled';
 const Table: React.FC<TDisplayProps> = ({
   searchFileName,
   handleDeleteFile,
+  handleOpenDir,
 }: TDisplayProps) => {
   const arFiles: [] = useSelector((state: IState) => state.files.arFiles);
   const bFilesNotFound: boolean = useSelector(
@@ -21,7 +22,7 @@ const Table: React.FC<TDisplayProps> = ({
   const getSearchedFiles: JSX.Element | JSX.Element[] = useMemo(():
     | JSX.Element
     | JSX.Element[] => {
-    const arFilteredFiles: never[] = arFiles.filter((oFile: TFile): boolean => {
+    const arFilteredFiles: TFile[] = arFiles.filter((oFile: TFile): boolean => {
       if (sDeferredSearchFileName === '') {
         return true;
       } else if (
@@ -63,7 +64,11 @@ const Table: React.FC<TDisplayProps> = ({
           <Access>{oFile.access}</Access>
         </Td>
         <Td center>
-          <Action src={view} alt='view' />
+          <Action
+            onClick={() => handleOpenDir(oFile.type, oFile.path, oFile.id)}
+            src={view}
+            alt='view'
+          />
           <Action
             onClick={() => handleDeleteFile(oFile.id)}
             src={deleteIcon}

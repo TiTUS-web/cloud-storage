@@ -9,7 +9,7 @@ import {
   setDisplayCreateDirModal,
   setFiles,
 } from '@/store/reducers/fileReducer';
-import { TCurrentPosition, TFileCreation } from '@/types/files.types';
+import { TCurrentDir, TFileCreation } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
@@ -23,7 +23,7 @@ const CreateDirModal = () => {
   const oFiles: Files = new Files();
 
   const oUser: TUser = oStorage.getData('oUser');
-  const oCurrentDir: TCurrentPosition = useSelector(
+  const oCurrentDir: TCurrentDir = useSelector(
     (state: IState) => state.files.oCurrentDir,
   );
 
@@ -49,7 +49,7 @@ const CreateDirModal = () => {
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: `${oCurrentDir.path}${sNameDir}`,
+      path: `${oCurrentDir.currentPath}${sNameDir}`,
       parentId: oCurrentDir.parentId,
       access: sAccessDir,
     };
@@ -94,7 +94,11 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input value={oCurrentDir.path + sNameDir} type='text' readOnly />
+          <Input
+            value={oCurrentDir.currentPath + sNameDir}
+            type='text'
+            readOnly
+          />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

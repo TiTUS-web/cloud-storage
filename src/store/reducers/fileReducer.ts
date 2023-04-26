@@ -1,5 +1,9 @@
 import Files from '@/api/Files';
-import { FilesActionTypes, TFilesState } from '@/types/files.types';
+import {
+  FilesActionTypes,
+  TCurrentDir,
+  TFilesState,
+} from '@/types/files.types';
 import { FilesActionReducer } from '@/types/store.types';
 
 const oFiles: Files = new Files();
@@ -7,7 +11,8 @@ const oFiles: Files = new Files();
 const defaultState: TFilesState = {
   sFilesDisplayMode: 'table',
   oCurrentDir: {
-    path: '/',
+    currentPath: '',
+    lastPath: '',
     parentId: null,
   },
 
@@ -65,5 +70,12 @@ export const setDisplayCreateDirModal = (bDisplayModal: boolean) => {
   return {
     type: FilesActionTypes.SET_DISPLAY_CREATE_DIR_MODAL,
     payload: bDisplayModal,
+  };
+};
+
+export const setCurrentDir = (oNewCurrentDir: TCurrentDir) => {
+  return {
+    type: FilesActionTypes.SET_CURRENT_DIR,
+    payload: oNewCurrentDir,
   };
 };

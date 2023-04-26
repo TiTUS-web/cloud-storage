@@ -1,9 +1,6 @@
 export type TFilesState = {
   sFilesDisplayMode: string;
-  oCurrentDir: {
-    path: string;
-    parentId: number | null;
-  };
+  oCurrentDir: TCurrentDir;
 
   arFiles: [];
   bFilesNotFound: boolean;
@@ -39,16 +36,13 @@ export type TFileCreation = {
 export type TDisplayProps = {
   searchFileName: string;
   handleDeleteFile: Function;
-};
-
-export type TCurrentPosition = {
-  path: string;
-  parentId: number | null;
+  handleOpenDir: Function;
 };
 
 export type TCurrentDir = {
-  path: string;
-  parentId: number;
+  currentPath: string;
+  lastPath: string;
+  parentId: number | null;
 };
 
 export enum FilesActionTypes {

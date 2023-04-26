@@ -7,7 +7,7 @@ import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
   const sBreadcrumbs: string = useSelector(
-    (state: IState) => state.files.oCurrentDir.path,
+    (state: IState) => state.files.oCurrentDir.currentPath,
   );
 
   return (

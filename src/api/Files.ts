@@ -2,11 +2,13 @@ import { AxiosResponse } from 'axios';
 
 import API from '@/api/axios';
 import { TFile, TFileCreation } from '@/types/files.types';
+import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
 
 class Files {
   private oStorage = new Storage();
   private token: string = this.oStorage.getData('token');
+  private oUser: TUser = this.oStorage.getData('oUser');
   private oConfigAxios = {
     headers: {
       Autorization: `Bearer ${this.token}`,
@@ -27,7 +29,7 @@ class Files {
 
   getFiles(): Promise<TFile[]> {
     return new Promise((resolve, reject) => {
-      API.get('/files', this.oConfigAxios)
+      API.get(`/files/${this.oUser.id}`, this.oConfigAxios)
         .then((oResponse: AxiosResponse<any, TFile[]>) => {
           resolve(oResponse.data);
         })

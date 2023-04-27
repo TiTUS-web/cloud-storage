@@ -16,7 +16,9 @@ import {
   setFiles,
   setDisplayCreateDirModal,
   setFilesMode,
+  setCurrentDir,
 } from '@/store/reducers/fileReducer';
+import { TCurrentDir } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
 import { StyledProps } from '@/types/styled';
@@ -38,6 +40,9 @@ const MyFiles = () => {
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
+  const oCurrentDir: TCurrentDir = useSelector(
+    (state: IState) => state.files.oCurrentDir,
+  );
 
   const handleFocusSearch = () => {
     setSearchActive(true);
@@ -49,6 +54,22 @@ const MyFiles = () => {
 
   const handleFilesMode = (sFilesMode: string) => {
     dispatch(setFilesMode(sFilesMode));
+  };
+
+  const handleOpenDir = (
+    sFileType: string,
+    sFilePath: string,
+    iFileId: number,
+  ) => {
+    if (sFileType === 'dir') {
+      const oNewCurrentDir: TCurrentDir = {
+        currentPath: sFilePath,
+        lastPath: oCurrentDir.currentPath,
+        parentId: iFileId,
+      };
+
+      dispatch(setCurrentDir(oNewCurrentDir));
+    }
   };
 
   const handleDisplayCreateDirModal = (sDisplayModal: boolean) => {
@@ -135,15 +156,17 @@ const MyFiles = () => {
         {sFilesDisplayMode === 'table' ? (
           <Table
             handleDeleteFile={handleDeleteFile}
+            handleOpenDir={handleOpenDir}
             searchFileName={sSearchFileName}
           />
         ) : (
           <Tile
             handleDeleteFile={handleDeleteFile}
+            handleOpenDir={handleOpenDir}
             searchFileName={sSearchFileName}
           />
         )}
-        {bSearchActive || <DragAndDrop />}
+        <DragAndDrop />
       </Container>
     </section>
   );

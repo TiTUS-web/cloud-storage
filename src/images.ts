@@ -10,13 +10,14 @@ import edit from '@/assets/icons/edit.svg';
 import left from '@/assets/icons/left.svg';
 import right from '@/assets/icons/right.svg';
 import search from '@/assets/icons/search.svg';
+import sortAscending from '@/assets/icons/sort-ascending.svg';
+import sortDescending from '@/assets/icons/sort-descending.svg';
 import tableActions from '@/assets/icons/table-actions.svg';
 import table from '@/assets/icons/table.svg';
 import tile from '@/assets/icons/tile.svg';
 import typeImg from '@/assets/icons/type-img.svg';
 import upload from '@/assets/icons/upload.svg';
 import view from '@/assets/icons/view.svg';
-
 import promo from '@/assets/promo.png';
 
 export {
@@ -39,4 +40,6 @@ export {
   tile,
   close,
   back,
+  sortAscending,
+  sortDescending,
 };

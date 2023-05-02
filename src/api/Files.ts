@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import API from '@/api/axios';
-import { TFile, TFileCreation } from '@/types/files.types';
+import { TFile, TFileCreation, TSort } from '@/types/files.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
 
@@ -27,9 +27,31 @@ class Files {
     });
   }
 
-  getFiles(): Promise<TFile[]> {
+  getFiles(iDirId: number | null, arSort: TSort[]): Promise<TFile[]> {
+    let sGetUrl: string;
+
+    if (iDirId) {
+      sGetUrl = `/files/${this.oUser.id}?parent=${iDirId}`;
+    }
+
+    if (arSort.length) {
+      sGetUrl = `/files/${this.oUser.id}?sort=${arSort
+        .map((oSort: TSort) => `${oSort.field}:${oSort.order}`)
+        .join(',')}`;
+    }
+
+    if (iDirId && arSort.length) {
+      sGetUrl = `/files/${this.oUser.id}?parent=${iDirId}&sort=${arSort
+        .map((oSort: TSort) => `${oSort.field}:${oSort.order}`)
+        .join(',')}`;
+    }
+
+    if (!iDirId && !arSort.length) {
+      sGetUrl = `/files/${this.oUser.id}`;
+    }
+
     return new Promise((resolve, reject) => {
-      API.get(`/files/${this.oUser.id}`, this.oConfigAxios)
+      API.get(sGetUrl, this.oConfigAxios)
         .then((oResponse: AxiosResponse<any, TFile[]>) => {
           resolve(oResponse.data);
         })

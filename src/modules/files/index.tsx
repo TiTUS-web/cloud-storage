@@ -1,4 +1,4 @@
-import React, { useState, useCallback, Dispatch } from 'react';
+import React, { useState, Dispatch, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 import styled from 'styled-components';
@@ -12,13 +12,15 @@ import Files from '@/api/Files';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { add, upload, tile, table } from '@/images';
 import { search } from '@/images';
+import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
 import {
   setFiles,
   setDisplayCreateDirModal,
   setFilesMode,
-  setCurrentDir,
+  setCurrentFileId,
+  setSearchFileName,
 } from '@/store/reducers/fileReducer';
-import { TCurrentDir } from '@/types/files.types';
+import { TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
 import { StyledProps } from '@/types/styled';
@@ -31,7 +33,7 @@ const MyFiles = () => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
   const oFiles: Files = new Files();
 
-  const [sSearchFileName, setSearchFilename] = useState('');
+  const [sSearchFileName, setSearch] = useState('');
   const [bSearchActive, setSearchActive] = useState(false);
 
   const sFilesDisplayMode: string = useSelector(
@@ -40,9 +42,15 @@ const MyFiles = () => {
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
-  const oCurrentDir: TCurrentDir = useSelector(
-    (state: IState) => state.files.oCurrentDir,
+
+  const arCurrentFiles: number[] = useSelector(
+    (state: IState) => state.files.arCurrentFiles,
   );
+
+  const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
+
+  const { getLastId } = useTransformCurrentFiles();
+  const iCurrentFileId: number | null = getLastId(arCurrentFiles);
 
   const handleFocusSearch = () => {
     setSearchActive(true);
@@ -56,43 +64,38 @@ const MyFiles = () => {
     dispatch(setFilesMode(sFilesMode));
   };
 
-  const handleOpenDir = (
-    sFileType: string,
-    sFilePath: string,
-    iFileId: number,
-  ) => {
-    if (sFileType === 'dir') {
-      const oNewCurrentDir: TCurrentDir = {
-        currentPath: sFilePath,
-        lastPath: oCurrentDir.currentPath,
-        parentId: iFileId,
-      };
-
-      dispatch(setCurrentDir(oNewCurrentDir));
-    }
-  };
-
   const handleDisplayCreateDirModal = (sDisplayModal: boolean) => {
     dispatch(setDisplayCreateDirModal(sDisplayModal));
   };
 
-  const getFiles = useCallback(async () => {
-    dispatch(await setFiles());
-  }, []);
+  const handleSearchFileName = () => {
+    dispatch(setSearchFileName(sSearchFileName));
+  };
+
+  const handleOpenDir = (sFileType: string, iDirId: number) => {
+    if (sFileType === 'dir') {
+      dispatch(setCurrentFileId(iDirId));
+    }
+  };
 
   const handleDeleteFile = (iFileId: number): void => {
     oFiles
       .deleteFile(iFileId)
       .then((sFileName) => {
         emitSuccessMessages(`"${sFileName}" was successfully deleted`);
-        getFiles();
       })
       .catch((err) => {
         emitErrorMessages(err);
       });
   };
 
-  getFiles();
+  const getFiles = async () => {
+    dispatch(await setFiles(iCurrentFileId, arSort));
+  };
+
+  useEffect(() => {
+    getFiles();
+  }, [arCurrentFiles, arSort]);
 
   return (
     <section className='files' style={{ padding: '189px 0px 150px' }}>
@@ -141,13 +144,15 @@ const MyFiles = () => {
               <SearchInput
                 onFocus={() => handleFocusSearch()}
                 onBlur={() => handleBlurSearch()}
-                onChange={(event: Event | any) =>
-                  setSearchFilename(event.target.value)
-                }
+                onChange={(event: Event | any) => setSearch(event.target.value)}
                 type='text'
                 placeholder={bSearchActive ? 'Enter file name' : 'Сloud search'}
               />
-              <Icon src={search} alt='search' />
+              <SearchButton
+                onClick={() => handleSearchFileName()}
+                src={search}
+                alt='search'
+              />
             </SearchInputWrapper>
           </Block>
         </Header>
@@ -157,13 +162,13 @@ const MyFiles = () => {
           <Table
             handleDeleteFile={handleDeleteFile}
             handleOpenDir={handleOpenDir}
-            searchFileName={sSearchFileName}
+            getFiles={getFiles}
           />
         ) : (
           <Tile
             handleDeleteFile={handleDeleteFile}
             handleOpenDir={handleOpenDir}
-            searchFileName={sSearchFileName}
+            getFiles={getFiles}
           />
         )}
         <DragAndDrop />
@@ -278,12 +283,9 @@ const IconButton = styled.img`
   }
 `;
 
-const Icon = styled.img`
-  display: block;
+const SearchButton = styled.img`
   margin-left: auto;
-  width: 20px;
-  height: 20px;
-
+  cursor: pointer;
   transition: 0.2s;
 
   :hover {

@@ -1,23 +1,54 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { Dispatch, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
-import { tableActions, typeImg, view, deleteIcon, edit } from '@/images';
+import {
+  tableActions,
+  typeImg,
+  view,
+  deleteIcon,
+  edit,
+  sortAscending,
+  sortDescending,
+} from '@/images';
 
-import { useFilterFiles } from '@/modules/files/hooks/useFilterFiles';
-import { TFile, TDisplayProps } from '@/types/files.types';
+import { getSort } from '@/modules/files/utils/getSort';
+import { setSort } from '@/store/reducers/fileReducer';
+import { TFile, TDisplayProps, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
 
 const Table: React.FC<TDisplayProps> = ({
-  searchFileName,
   handleDeleteFile,
   handleOpenDir,
 }: TDisplayProps) => {
+  const dispatch: Dispatch<AnyAction> = useDispatch();
+
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
-  const arFiles: TFile[] = useFilterFiles(searchFileName);
+  const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
+
+  const [oTypeSort, setTypeSort] = useState({});
+  const [oNameSort, setNameSort] = useState({});
+  const [oDateSort, setDateSort] = useState({});
+  const [oSizeSort, setSizeSort] = useState({});
+
+  useEffect(() => {
+    const handleSort = () => {
+      const arSort: TSort[] | object[] = getSort([
+        oTypeSort,
+        oNameSort,
+        oDateSort,
+        oSizeSort,
+      ]);
+
+      dispatch(setSort(arSort));
+    };
+
+    handleSort();
+  }, [oTypeSort, oNameSort, oDateSort, oSizeSort]);
 
   if (bFilesNotFound) {
     return (
@@ -42,10 +73,74 @@ const Table: React.FC<TDisplayProps> = ({
           <Th center>
             <CheckBox type='checkbox' />
           </Th>
-          <Th>Type</Th>
-          <Th>Name</Th>
-          <Th center>Date created</Th>
-          <Th center>Size</Th>
+          <Th>
+            <CellWrapper>
+              Type
+              <SortWrapper>
+                <Sort
+                  onClick={() => setTypeSort({ field: 'type', order: 'ASC' })}
+                  src={sortAscending}
+                  alt='sort-ascending'
+                />
+                <Sort
+                  onClick={() => setTypeSort({ field: 'type', order: 'DESC' })}
+                  src={sortDescending}
+                  alt='sort-descending'
+                />
+              </SortWrapper>
+            </CellWrapper>
+          </Th>
+          <Th>
+            <CellWrapper>
+              Name
+              <SortWrapper>
+                <Sort
+                  onClick={() => setNameSort({ field: 'name', order: 'ASC' })}
+                  src={sortAscending}
+                  alt='sort-ascending'
+                />
+                <Sort
+                  onClick={() => setNameSort({ field: 'name', order: 'DESC' })}
+                  src={sortDescending}
+                  alt='sort-descending'
+                />
+              </SortWrapper>
+            </CellWrapper>
+          </Th>
+          <Th center>
+            <CellWrapper>
+              Date created
+              <SortWrapper>
+                <Sort
+                  onClick={() => setDateSort({ field: 'date', order: 'ASC' })}
+                  src={sortAscending}
+                  alt='sort-ascending'
+                />
+                <Sort
+                  onClick={() => setDateSort({ field: 'date', order: 'DESC' })}
+                  src={sortDescending}
+                  alt='sort-descending'
+                />
+              </SortWrapper>
+            </CellWrapper>
+          </Th>
+          <Th center>
+            <CellWrapper>
+              Size
+              <SortWrapper>
+                <Sort
+                  onClick={() => setSizeSort({ field: 'size', order: 'ASC' })}
+                  src={sortAscending}
+                  alt='sort-ascending'
+                />
+                <Sort
+                  onClick={() => setSizeSort({ field: 'size', order: 'DESC' })}
+                  src={sortDescending}
+                  alt='sort-descending'
+                />
+              </SortWrapper>
+            </CellWrapper>
+          </Th>
           <Th center>Access</Th>
           <Th center>
             <Action src={tableActions} alt='actions' />
@@ -70,7 +165,7 @@ const Table: React.FC<TDisplayProps> = ({
             </Td>
             <Td center>
               <Action
-                onClick={() => handleOpenDir(oFile.type, oFile.path, oFile.id)}
+                onClick={() => handleOpenDir(oFile.type, oFile.id)}
                 src={view}
                 alt='view'
               />
@@ -156,6 +251,11 @@ const Th = styled.th`
   vertical-align: middle;
 `;
 
+const CellWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Td = styled.td`
   text-align: ${(props: StyledProps) => (props.center ? 'center' : 'left')};
   border: none;
@@ -180,6 +280,24 @@ const Tr = styled.tr`
 
   :hover {
     background: #f4f7fc;
+  }
+`;
+
+const SortWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 2px;
+`;
+
+const Sort = styled.img`
+  cursor: pointer;
+  width: 10px;
+  height: 8px;
+  transition: 0.2s;
+  margin-left: 2px;
+
+  :hover {
+    opacity: 0.8;
   }
 `;
 

@@ -5,11 +5,13 @@ import styled from 'styled-components';
 
 import Files from '@/api/Files';
 import { add, close } from '@/images';
+
+import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
 import {
   setDisplayCreateDirModal,
   setFiles,
 } from '@/store/reducers/fileReducer';
-import { TCurrentDir, TFileCreation } from '@/types/files.types';
+import { TFile, TFileCreation, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
@@ -17,15 +19,23 @@ import {
   emitErrorMessages,
   emitSuccessMessages,
 } from '@/utils/toastifyActions';
+
 const CreateDirModal = () => {
   const oStorage: Storage = new Storage();
   const dispatch: Dispatch<AnyAction> = useDispatch();
   const oFiles: Files = new Files();
 
   const oUser: TUser = oStorage.getData('oUser');
-  const oCurrentDir: TCurrentDir = useSelector(
-    (state: IState) => state.files.oCurrentDir,
+
+  const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
+  const arCurrentFiles: number[] = useSelector(
+    (state: IState) => state.files.arCurrentFiles,
   );
+  const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
+
+  const { getLastId, getPath } = useTransformCurrentFiles();
+  const sCurrentPath: string = getPath(arFiles, arCurrentFiles);
+  const iCurrentFileId: number | null = getLastId(arCurrentFiles);
 
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
@@ -49,8 +59,8 @@ const CreateDirModal = () => {
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: `${oCurrentDir.currentPath}${sNameDir}`,
-      parentId: oCurrentDir.parentId,
+      path: `${sCurrentPath}${sNameDir}`,
+      parentId: iCurrentFileId ? iCurrentFileId : null,
       access: sAccessDir,
     };
 
@@ -61,7 +71,7 @@ const CreateDirModal = () => {
           `Directory "${sFileName}" was successfully created`,
         );
         handleDisplayCreateDirModal(false);
-        dispatch(await setFiles());
+        dispatch(await setFiles(iCurrentFileId, arSort));
       })
       .catch((err) => {
         emitErrorMessages(err);
@@ -94,11 +104,7 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input
-            value={oCurrentDir.currentPath + sNameDir}
-            type='text'
-            readOnly
-          />
+          <Input value={sCurrentPath + sNameDir} type='text' readOnly />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

@@ -1,25 +1,26 @@
 import Files from '@/api/Files';
 import {
   FilesActionTypes,
-  TCurrentDir,
+  TFile,
   TFilesState,
+  TSort,
 } from '@/types/files.types';
 import { FilesActionReducer } from '@/types/store.types';
 
 const oFiles: Files = new Files();
 
 const defaultState: TFilesState = {
+  sSearchFileName: '',
   sFilesDisplayMode: 'table',
-  oCurrentDir: {
-    currentPath: '',
-    lastPath: '',
-    parentId: null,
-  },
+
+  arCurrentFiles: [],
 
   arFiles: [],
   bFilesNotFound: true,
 
   bShowCreateDirModal: false,
+
+  arSort: [],
 };
 
 export default function fileReducer(
@@ -43,10 +44,20 @@ export default function fileReducer(
         ...state,
         bShowCreateDirModal: action.payload,
       };
-    case FilesActionTypes.SET_CURRENT_DIR:
+    case FilesActionTypes.SET_SEARCH_FILE_NAME:
       return {
         ...state,
-        oCurrentDir: action.payload,
+        sSearchFileName: action.payload,
+      };
+    case FilesActionTypes.SET_CURRENT_FILE:
+      return {
+        ...state,
+        arCurrentFiles: [...state.arCurrentFiles, action.payload],
+      };
+    case FilesActionTypes.SET_SORT:
+      return {
+        ...state,
+        arSort: action.payload,
       };
     default:
       return state;
@@ -57,8 +68,8 @@ export const setFilesMode = (sDisplayMode: string) => {
   return { type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode };
 };
 
-export const setFiles = async () => {
-  const arFiles = await oFiles.getFiles();
+export const setFiles = async (iDirId: number | null, arSort: TSort[]) => {
+  const arFiles: TFile[] = await oFiles.getFiles(iDirId, arSort);
 
   return {
     type: FilesActionTypes.SET_FILES,
@@ -73,9 +84,23 @@ export const setDisplayCreateDirModal = (bDisplayModal: boolean) => {
   };
 };
 
-export const setCurrentDir = (oNewCurrentDir: TCurrentDir) => {
+export const setCurrentFileId = (iDirId: number) => {
   return {
-    type: FilesActionTypes.SET_CURRENT_DIR,
-    payload: oNewCurrentDir,
+    type: FilesActionTypes.SET_CURRENT_FILE,
+    payload: iDirId,
+  };
+};
+
+export const setSearchFileName = (sSearchFileName: string) => {
+  return {
+    type: FilesActionTypes.SET_SEARCH_FILE_NAME,
+    payload: sSearchFileName,
+  };
+};
+
+export const setSort = (arSort: TSort[] | object[]) => {
+  return {
+    type: FilesActionTypes.SET_SORT,
+    payload: arSort,
   };
 };

@@ -1,11 +1,14 @@
 export type TFilesState = {
+  sSearchFileName: string;
   sFilesDisplayMode: string;
-  oCurrentDir: TCurrentDir;
+  arCurrentFiles: number[] | [];
 
   arFiles: [];
   bFilesNotFound: boolean;
 
   bShowCreateDirModal: boolean;
+
+  arSort: [];
 };
 
 export type TFile = {
@@ -34,20 +37,21 @@ export type TFileCreation = {
 };
 
 export type TDisplayProps = {
-  searchFileName: string;
   handleDeleteFile: Function;
   handleOpenDir: Function;
+  getFiles: Function;
 };
 
-export type TCurrentDir = {
-  currentPath: string;
-  lastPath: string;
-  parentId: number | null;
+export type TSort = {
+  field: string;
+  order: string;
 };
 
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
   SET_DISPLAY_CREATE_DIR_MODAL = 'SET_DISPLAY_CREATE_DIR_MODAL',
-  SET_CURRENT_DIR = 'SET_CURRENT_DIR',
+  SET_CURRENT_FILE = 'SET_CURRENT_FILE',
+  SET_SEARCH_FILE_NAME = 'SET_SEARCH_FILE_NAME',
+  SET_SORT = 'SET_SORT',
 }

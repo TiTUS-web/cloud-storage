@@ -6,13 +6,13 @@ import { dir } from '@/images';
 import { TDisplayProps, TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
-const Tile: React.FC<TDisplayProps> = ({ searchFileName }: TDisplayProps) => {
+const Tile: React.FC<TDisplayProps> = () => {
   const arFiles: [] = useSelector((state: IState) => state.files.arFiles);
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
 
-  const sDeferredSearchFileName: string = useDeferredValue(searchFileName);
+  const sDeferredSearchFileName: string = useDeferredValue('');
   const getSearchedFiles: JSX.Element | JSX.Element[] = useMemo(():
     | JSX.Element
     | JSX.Element[] => {

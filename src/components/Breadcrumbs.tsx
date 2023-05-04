@@ -3,17 +3,35 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { back } from '@/images';
+
+import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
+import { TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
-  const sBreadcrumbs: string = useSelector(
-    (state: IState) => state.files.oCurrentDir.currentPath,
+  const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
+  const arCurrentFiles: number[] = useSelector(
+    (state: IState) => state.files.arCurrentFiles,
   );
+
+  const { getBreadcrumbs } = useTransformCurrentFiles();
+
+  const arBreadCrumbs: string[] = getBreadcrumbs(arFiles, arCurrentFiles);
 
   return (
     <Wrapper>
       <IconButton src={back} alt='back' />
-      {'Все файлы ' + sBreadcrumbs}
+      <Breadcrumb>All files</Breadcrumb>
+      {arBreadCrumbs.length ? <Separator>{'>'}</Separator> : ''}
+
+      {arBreadCrumbs.map((sFileName: string) => {
+        return (
+          <Block key={sFileName}>
+            <Breadcrumb>{sFileName}</Breadcrumb>
+            <Separator>{'>'}</Separator>
+          </Block>
+        );
+      })}
     </Wrapper>
   );
 };
@@ -36,12 +54,34 @@ const IconButton = styled.img`
   width: 20px;
   height: 20px;
   margin-right: 10px;
-
   transition: 0.2s;
 
   :hover {
     opacity: 0.8;
   }
+`;
+
+const Block = styled.div`
+  display: flex;
+
+  &:last-child span {
+    display: none;
+  }
+`;
+
+const Breadcrumb = styled.div`
+  transition: 0.2s;
+  cursor: pointer;
+  border-bottom: 2px;
+  margin-left: 5px;
+
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const Separator = styled.span`
+  margin: 0 10px;
 `;
 
 export default Breadcrumbs;

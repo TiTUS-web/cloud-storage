@@ -4,18 +4,12 @@ import styled from 'styled-components';
 
 import { back } from '@/images';
 
-import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
-import { TFile } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
-  const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
-  const arCurrentOpenDirs: number[] = useSelector(
-    (state: IState) => state.files.arCurrentOpenDirs,
+  const arBreadCrumbs: string[] = useSelector(
+    (state: IState) => state.files.arBreadCrumbs,
   );
-
-  const { getBreadcrumbs } = useTransformCurrentFiles();
-  const arBreadCrumbs: string[] = getBreadcrumbs(arFiles, arCurrentOpenDirs);
 
   return (
     <Wrapper>

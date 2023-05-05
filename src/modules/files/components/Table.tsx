@@ -165,7 +165,9 @@ const Table: React.FC<TDisplayProps> = ({
             </Td>
             <Td center>
               <Action
-                onClick={() => handleOpenDir(oFile.type, oFile.id)}
+                onClick={() =>
+                  handleOpenDir(oFile.type, { id: oFile.id, name: oFile.name })
+                }
                 src={view}
                 alt='view'
               />

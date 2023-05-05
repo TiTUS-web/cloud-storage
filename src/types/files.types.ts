@@ -4,6 +4,7 @@ export type TFilesState = {
 
   arCurrentOpenDirs: number[] | [];
   iLastCurrentOpenDir: number | null;
+  arBreadCrumbs: string[] | [];
 
   arFiles: [];
   bFilesNotFound: boolean;

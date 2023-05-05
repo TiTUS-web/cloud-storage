@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Files from '@/api/Files';
 import { add, close } from '@/images';
 
-import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
 import {
   setDisplayCreateDirModal,
   setFiles,
@@ -36,7 +35,6 @@ const CreateDirModal = () => {
   );
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
 
-  const { getPath } = useTransformCurrentFiles();
   const sCurrentPath: string = getPath(arFiles, arCurrentOpenDirs);
 
   const [sNameDir, setNameDir] = useState('');

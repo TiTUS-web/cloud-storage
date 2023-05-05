@@ -15,6 +15,7 @@ const defaultState: TFilesState = {
 
   arCurrentOpenDirs: [],
   iLastCurrentOpenDir: null,
+  arBreadCrumbs: [],
 
   arFiles: [],
   bFilesNotFound: true,
@@ -53,8 +54,9 @@ export default function fileReducer(
     case FilesActionTypes.SET_CURRENT_OPEN_FILE:
       return {
         ...state,
-        arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload],
-        iLastCurrentOpenDir: action.payload,
+        arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload.id],
+        iLastCurrentOpenDir: action.payload.id,
+        arBreadCrumbs: [...state.arBreadCrumbs, action.payload.name],
       };
     case FilesActionTypes.SET_SORT:
       return {
@@ -86,10 +88,10 @@ export const setDisplayCreateDirModal = (bDisplayModal: boolean) => {
   };
 };
 
-export const setCurrentOpenFile = (iDirId: number) => {
+export const setCurrentOpenFile = (oDir: { id: number; name: string }) => {
   return {
     type: FilesActionTypes.SET_CURRENT_OPEN_FILE,
-    payload: iDirId,
+    payload: oDir,
   };
 };
 

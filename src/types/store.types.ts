@@ -11,7 +11,7 @@ export type AuthActionReducer = {
 };
 
 export type FilesActionReducer = {
-  payload: string | [];
+  payload: any;
   type: string;
 };
 

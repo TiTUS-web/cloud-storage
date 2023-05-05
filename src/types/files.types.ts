@@ -1,7 +1,9 @@
 export type TFilesState = {
   sSearchFileName: string;
   sFilesDisplayMode: string;
-  arCurrentFiles: number[] | [];
+
+  arCurrentOpenDirs: number[] | [];
+  iLastCurrentOpenDir: number | null;
 
   arFiles: [];
   bFilesNotFound: boolean;
@@ -51,7 +53,7 @@ export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
   SET_DISPLAY_CREATE_DIR_MODAL = 'SET_DISPLAY_CREATE_DIR_MODAL',
-  SET_CURRENT_FILE = 'SET_CURRENT_FILE',
+  SET_CURRENT_OPEN_FILE = 'SET_CURRENT_OPEN_FILE',
   SET_SEARCH_FILE_NAME = 'SET_SEARCH_FILE_NAME',
   SET_SORT = 'SET_SORT',
 }

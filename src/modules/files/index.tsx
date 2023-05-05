@@ -17,8 +17,8 @@ import {
   setFiles,
   setDisplayCreateDirModal,
   setFilesMode,
-  setCurrentFileId,
   setSearchFileName,
+  setCurrentOpenFile,
 } from '@/store/reducers/fileReducer';
 import { TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
@@ -42,15 +42,10 @@ const MyFiles = () => {
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
-
-  const arCurrentFiles: number[] = useSelector(
-    (state: IState) => state.files.arCurrentFiles,
-  );
-
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
-
-  const { getLastId } = useTransformCurrentFiles();
-  const iCurrentFileId: number | null = getLastId(arCurrentFiles);
+  const iLastCurrentOpenDir: number | null = useSelector(
+    (state: IState) => state.files.iLastCurrentOpenDir,
+  );
 
   const handleFocusSearch = () => {
     setSearchActive(true);
@@ -74,7 +69,7 @@ const MyFiles = () => {
 
   const handleOpenDir = (sFileType: string, iDirId: number) => {
     if (sFileType === 'dir') {
-      dispatch(setCurrentFileId(iDirId));
+      dispatch(setCurrentOpenFile(iDirId));
     }
   };
 
@@ -90,12 +85,12 @@ const MyFiles = () => {
   };
 
   const getFiles = async () => {
-    dispatch(await setFiles(iCurrentFileId, arSort));
+    dispatch(await setFiles(iLastCurrentOpenDir, arSort));
   };
 
   useEffect(() => {
     getFiles();
-  }, [arCurrentFiles, arSort]);
+  }, [iLastCurrentOpenDir, arSort]);
 
   return (
     <section className='files' style={{ padding: '189px 0px 150px' }}>

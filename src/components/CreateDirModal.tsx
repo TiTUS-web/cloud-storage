@@ -28,14 +28,16 @@ const CreateDirModal = () => {
   const oUser: TUser = oStorage.getData('oUser');
 
   const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
-  const arCurrentFiles: number[] = useSelector(
-    (state: IState) => state.files.arCurrentFiles,
+  const arCurrentOpenDirs: number[] = useSelector(
+    (state: IState) => state.files.arCurrentOpenDirs,
+  );
+  const iLastCurrentOpenDir: number | null = useSelector(
+    (state: IState) => state.files.iLastCurrentOpenDir,
   );
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
 
-  const { getLastId, getPath } = useTransformCurrentFiles();
-  const sCurrentPath: string = getPath(arFiles, arCurrentFiles);
-  const iCurrentFileId: number | null = getLastId(arCurrentFiles);
+  const { getPath } = useTransformCurrentFiles();
+  const sCurrentPath: string = getPath(arFiles, arCurrentOpenDirs);
 
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
@@ -60,7 +62,7 @@ const CreateDirModal = () => {
       format: 'dir',
       userId: oUser.id,
       path: `${sCurrentPath}${sNameDir}`,
-      parentId: iCurrentFileId ? iCurrentFileId : null,
+      parentId: iLastCurrentOpenDir,
       access: sAccessDir,
     };
 
@@ -71,7 +73,7 @@ const CreateDirModal = () => {
           `Directory "${sFileName}" was successfully created`,
         );
         handleDisplayCreateDirModal(false);
-        dispatch(await setFiles(iCurrentFileId, arSort));
+        dispatch(await setFiles(iLastCurrentOpenDir, arSort));
       })
       .catch((err) => {
         emitErrorMessages(err);

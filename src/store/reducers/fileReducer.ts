@@ -13,7 +13,8 @@ const defaultState: TFilesState = {
   sSearchFileName: '',
   sFilesDisplayMode: 'table',
 
-  arCurrentFiles: [],
+  arCurrentOpenDirs: [],
+  iLastCurrentOpenDir: null,
 
   arFiles: [],
   bFilesNotFound: true,
@@ -49,10 +50,11 @@ export default function fileReducer(
         ...state,
         sSearchFileName: action.payload,
       };
-    case FilesActionTypes.SET_CURRENT_FILE:
+    case FilesActionTypes.SET_CURRENT_OPEN_FILE:
       return {
         ...state,
-        arCurrentFiles: [...state.arCurrentFiles, action.payload],
+        arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload],
+        iLastCurrentOpenDir: action.payload,
       };
     case FilesActionTypes.SET_SORT:
       return {
@@ -84,9 +86,9 @@ export const setDisplayCreateDirModal = (bDisplayModal: boolean) => {
   };
 };
 
-export const setCurrentFileId = (iDirId: number) => {
+export const setCurrentOpenFile = (iDirId: number) => {
   return {
-    type: FilesActionTypes.SET_CURRENT_FILE,
+    type: FilesActionTypes.SET_CURRENT_OPEN_FILE,
     payload: iDirId,
   };
 };

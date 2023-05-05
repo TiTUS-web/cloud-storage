@@ -36,13 +36,13 @@ class Files {
 
     if (arSort.length) {
       sGetUrl = `/files/${this.oUser.id}?sort=${arSort
-        .map((oSort: TSort) => `${oSort.field}:${oSort.order}`)
+        .map((oSort: TSort): string => `${oSort.field}:${oSort.order}`)
         .join(',')}`;
     }
 
     if (iDirId && arSort.length) {
       sGetUrl = `/files/${this.oUser.id}?parent=${iDirId}&sort=${arSort
-        .map((oSort: TSort) => `${oSort.field}:${oSort.order}`)
+        .map((oSort: TSort): string => `${oSort.field}:${oSort.order}`)
         .join(',')}`;
     }
 

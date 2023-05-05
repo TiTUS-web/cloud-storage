@@ -10,13 +10,12 @@ import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
   const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
-  const arCurrentFiles: number[] = useSelector(
-    (state: IState) => state.files.arCurrentFiles,
+  const arCurrentOpenDirs: number[] = useSelector(
+    (state: IState) => state.files.arCurrentOpenDirs,
   );
 
   const { getBreadcrumbs } = useTransformCurrentFiles();
-
-  const arBreadCrumbs: string[] = getBreadcrumbs(arFiles, arCurrentFiles);
+  const arBreadCrumbs: string[] = getBreadcrumbs(arFiles, arCurrentOpenDirs);
 
   return (
     <Wrapper>

@@ -10,7 +10,7 @@ import Tile from './components/Tile';
 import Files from '@/api/Files';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { add, upload, tile, table } from '@/images';
+import { add, upload, tile, table, cross } from '@/images';
 import { search } from '@/images';
 import {
   setFiles,
@@ -32,7 +32,7 @@ const MyFiles = () => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
   const oFiles: Files = new Files();
 
-  const [sSearchFileName, setSearch] = useState('');
+  const [sSearch, setSearch] = useState('');
   const [bSearchActive, setSearchActive] = useState(false);
 
   const sFilesDisplayMode: string = useSelector(
@@ -44,6 +44,9 @@ const MyFiles = () => {
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
   const iLastCurrentOpenDir: number | null = useSelector(
     (state: IState) => state.files.iLastCurrentOpenDir,
+  );
+  const sSearchFileName: string = useSelector(
+    (state: IState) => state.files.sSearchFileName,
   );
 
   const handleFocusSearch = () => {
@@ -62,7 +65,8 @@ const MyFiles = () => {
     dispatch(setDisplayCreateDirModal(sDisplayModal));
   };
 
-  const handleSearchFileName = () => {
+  const handleSearchFileName = (sSearchFileName: string) => {
+    setSearch(sSearchFileName);
     dispatch(setSearchFileName(sSearchFileName));
   };
 
@@ -71,6 +75,7 @@ const MyFiles = () => {
     oDir: { id: number; name: string },
   ) => {
     if (sFileType === 'dir') {
+      dispatch(setSearchFileName(''));
       dispatch(setCurrentOpenFile(oDir));
     }
   };
@@ -87,12 +92,12 @@ const MyFiles = () => {
   };
 
   const getFiles = async () => {
-    dispatch(await setFiles(iLastCurrentOpenDir, arSort));
+    dispatch(await setFiles(iLastCurrentOpenDir, arSort, sSearchFileName));
   };
 
   useEffect(() => {
     getFiles();
-  }, [iLastCurrentOpenDir, arSort]);
+  }, [iLastCurrentOpenDir, arSort, sSearchFileName]);
 
   return (
     <section className='files' style={{ padding: '189px 0px 150px' }}>
@@ -139,6 +144,7 @@ const MyFiles = () => {
             </Utils>
             <SearchInputWrapper bSearchActive={bSearchActive}>
               <SearchInput
+                value={sSearch}
                 onFocus={() => handleFocusSearch()}
                 onBlur={() => handleBlurSearch()}
                 onChange={(event: Event | any) => setSearch(event.target.value)}
@@ -146,11 +152,19 @@ const MyFiles = () => {
                 placeholder={bSearchActive ? 'Enter file name' : 'Сloud search'}
               />
               <SearchButton
-                onClick={() => handleSearchFileName()}
+                onClick={() => handleSearchFileName(sSearch)}
                 src={search}
                 alt='search'
               />
             </SearchInputWrapper>
+            {sSearch && (
+              <SearchButton
+                onClick={() => handleSearchFileName('')}
+                style={{ marginLeft: '10px' }}
+                src={cross}
+                alt='cross'
+              />
+            )}
           </Block>
         </Header>
         {sFilesDisplayMode && <Breadcrumbs />}

@@ -3,6 +3,7 @@ import background from '@/assets/background.jpg';
 import add from '@/assets/icons/add.svg';
 import back from '@/assets/icons/back.svg';
 import close from '@/assets/icons/close.svg';
+import cross from '@/assets/icons/cross.svg';
 import deleteIcon from '@/assets/icons/delete.svg';
 import dir from '@/assets/icons/dir.svg';
 import document from '@/assets/icons/document.svg';
@@ -42,4 +43,5 @@ export {
   back,
   sortAscending,
   sortDescending,
+  cross,
 };

@@ -1,4 +1,5 @@
 import Files from '@/api/Files';
+import { getFilteredFilesByName } from '@/modules/files/utils/getFilteredFilesByName';
 import {
   FilesActionTypes,
   TBreadCrumb,
@@ -83,8 +84,16 @@ export const setFilesMode = (sDisplayMode: string) => {
   return { type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode };
 };
 
-export const setFiles = async (iDirId: number | null, arSort: TSort[]) => {
-  const arFiles: TFile[] = await oFiles.getFiles(iDirId, arSort);
+export const setFiles = async (
+  iDirId: number | null,
+  arSort: TSort[],
+  sSearchFileName: string,
+) => {
+  let arFiles: TFile[] = await oFiles.getFiles(iDirId, arSort);
+
+  if (sSearchFileName) {
+    arFiles = getFilteredFilesByName(arFiles, sSearchFileName);
+  }
 
   return {
     type: FilesActionTypes.SET_FILES,

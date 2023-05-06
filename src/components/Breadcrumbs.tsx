@@ -4,7 +4,11 @@ import styled from 'styled-components';
 
 import { back } from '@/images';
 
-import { backCurrentOpenFile, setFiles } from '@/store/reducers/fileReducer';
+import {
+  backCurrentOpenFile,
+  setFiles,
+  setSearchFileName,
+} from '@/store/reducers/fileReducer';
 import { TBreadCrumb, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
@@ -20,10 +24,13 @@ const Breadcrumbs = () => {
   const arSort: TSort[] | [] = useSelector(
     (state: IState) => state.files.arSort,
   );
+  const sSearchFileName: string = useSelector(
+    (state: IState) => state.files.sSearchFileName,
+  );
 
   const getFilesByBreadCrumb = async (oDir: TBreadCrumb) => {
     handleBackDirByBreadCrumb(arCurrentOpenDirs, arBreadCrumbs, oDir.id);
-    dispatch(await setFiles(oDir.id, arSort));
+    dispatch(await setFiles(oDir.id, arSort, sSearchFileName));
   };
 
   const handleBackDirByBreadCrumb = (
@@ -48,6 +55,7 @@ const Breadcrumbs = () => {
     const iNewCurrentOpenDir: number =
       arNewCurrentOpenDirs[arNewCurrentOpenDirs.length - 1];
 
+    dispatch(setSearchFileName(''));
     dispatch(
       backCurrentOpenFile(
         arNewCurrentOpenDirs,
@@ -66,6 +74,7 @@ const Breadcrumbs = () => {
     const iCurrentOpenDir: number =
       arCurrentOpenDirs[arCurrentOpenDirs.length - 1];
 
+    dispatch(setSearchFileName(''));
     dispatch(
       backCurrentOpenFile(arCurrentOpenDirs, arBreadCrumbs, iCurrentOpenDir),
     );

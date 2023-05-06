@@ -33,6 +33,9 @@ const CreateDirModal = () => {
     (state: IState) => state.files.iLastCurrentOpenDir,
   );
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
+  const sSearchFileName: string = useSelector(
+    (state: IState) => state.files.sSearchFileName,
+  );
 
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
@@ -79,7 +82,7 @@ const CreateDirModal = () => {
           `Directory "${sFileName}" was successfully created`,
         );
         handleDisplayCreateDirModal(false);
-        dispatch(await setFiles(iLastCurrentOpenDir, arSort));
+        dispatch(await setFiles(iLastCurrentOpenDir, arSort, sSearchFileName));
       })
       .catch((err) => {
         emitErrorMessages(err);

@@ -14,7 +14,7 @@ import {
 } from '@/images';
 
 import { getSort } from '@/modules/files/utils/getSort';
-import { setSort } from '@/store/reducers/fileReducer';
+import { setSearchFileName, setSort } from '@/store/reducers/fileReducer';
 import { TFile, TDisplayProps, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
@@ -44,6 +44,7 @@ const Table: React.FC<TDisplayProps> = ({
         oSizeSort,
       ]);
 
+      dispatch(setSearchFileName(''));
       dispatch(setSort(arSort));
     };
 

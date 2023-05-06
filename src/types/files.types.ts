@@ -3,6 +3,7 @@ export type TFilesState = {
   sFilesDisplayMode: string;
 
   arCurrentOpenDirs: number[] | [];
+  arBreadCrumbs: TBreadCrumb[] | [];
   iLastCurrentOpenDir: number | null;
 
   arFiles: [];
@@ -10,7 +11,7 @@ export type TFilesState = {
 
   bShowCreateDirModal: boolean;
 
-  arSort: [];
+  arSort: TSort[] | [];
 };
 
 export type TFile = {
@@ -28,7 +29,7 @@ export type TFile = {
   access: string;
 };
 
-export type TFileCreation = {
+export type TDirCreation = {
   name: string;
   type: string;
   format: string;
@@ -49,11 +50,17 @@ export type TSort = {
   order: string;
 };
 
+export type TBreadCrumb = {
+  id: number;
+  name: string;
+};
+
 export enum FilesActionTypes {
   SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
   SET_DISPLAY_CREATE_DIR_MODAL = 'SET_DISPLAY_CREATE_DIR_MODAL',
   SET_CURRENT_OPEN_FILE = 'SET_CURRENT_OPEN_FILE',
+  BACK_CURRENT_OPEN_FILE = 'BACK_CURRENT_OPEN_FILE',
   SET_SEARCH_FILE_NAME = 'SET_SEARCH_FILE_NAME',
   SET_SORT = 'SET_SORT',
 }

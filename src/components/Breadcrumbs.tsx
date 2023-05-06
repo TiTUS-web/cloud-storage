@@ -1,32 +1,96 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { back } from '@/images';
 
-import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
-import { TFile } from '@/types/files.types';
+import { backCurrentOpenFile, setFiles } from '@/store/reducers/fileReducer';
+import { TBreadCrumb, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
-  const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
-  const arCurrentOpenDirs: number[] = useSelector(
+  const dispatch = useDispatch();
+
+  const arCurrentOpenDirs: number[] | [] = useSelector(
     (state: IState) => state.files.arCurrentOpenDirs,
   );
+  const arBreadCrumbs: TBreadCrumb[] | [] = useSelector(
+    (state: IState) => state.files.arBreadCrumbs,
+  );
+  const arSort: TSort[] | [] = useSelector(
+    (state: IState) => state.files.arSort,
+  );
 
-  const { getBreadcrumbs } = useTransformCurrentFiles();
-  const arBreadCrumbs: string[] = getBreadcrumbs(arFiles, arCurrentOpenDirs);
+  const getFilesByBreadCrumb = async (oDir: TBreadCrumb) => {
+    handleBackDirByBreadCrumb(arCurrentOpenDirs, arBreadCrumbs, oDir.id);
+    dispatch(await setFiles(oDir.id, arSort));
+  };
+
+  const handleBackDirByBreadCrumb = (
+    arCurrentOpenDirs: number[],
+    arBreadCrumbs: TBreadCrumb[],
+    iDirId: number,
+  ) => {
+    const iCurrentOpenDir: number =
+      arCurrentOpenDirs[arCurrentOpenDirs.length - 1];
+
+    if (iCurrentOpenDir === iDirId) return;
+
+    const index: number = arBreadCrumbs.findIndex(
+      (oBreadCrumb: TBreadCrumb): boolean => oBreadCrumb.id === iDirId,
+    );
+
+    const arNewCurrentOpenDirs: number[] = arCurrentOpenDirs.slice(
+      0,
+      index + 1,
+    );
+    const arNewBreadCrumbs: TBreadCrumb[] = arBreadCrumbs.slice(0, index + 1);
+    const iNewCurrentOpenDir: number =
+      arNewCurrentOpenDirs[arNewCurrentOpenDirs.length - 1];
+
+    dispatch(
+      backCurrentOpenFile(
+        arNewCurrentOpenDirs,
+        arNewBreadCrumbs,
+        iNewCurrentOpenDir,
+      ),
+    );
+  };
+
+  const handleBackDir = (
+    arCurrentOpenDirs: number[],
+    arBreadCrumbs: TBreadCrumb[],
+  ) => {
+    arCurrentOpenDirs.pop();
+    arBreadCrumbs.pop();
+    const iCurrentOpenDir: number =
+      arCurrentOpenDirs[arCurrentOpenDirs.length - 1];
+
+    dispatch(
+      backCurrentOpenFile(arCurrentOpenDirs, arBreadCrumbs, iCurrentOpenDir),
+    );
+  };
 
   return (
     <Wrapper>
-      <IconButton src={back} alt='back' />
-      <Breadcrumb>All files</Breadcrumb>
+      {arBreadCrumbs.length ? (
+        <IconButton
+          onClick={() => handleBackDir(arCurrentOpenDirs, arBreadCrumbs)}
+          src={back}
+          alt='back'
+        />
+      ) : (
+        ''
+      )}
+      <Breadcrumb onClick={() => handleBackDir([], [])}>All files</Breadcrumb>
       {arBreadCrumbs.length ? <Separator>{'>'}</Separator> : ''}
 
-      {arBreadCrumbs.map((sFileName: string) => {
+      {arBreadCrumbs.map((oDir: { id: number; name: string }) => {
         return (
-          <Block key={sFileName}>
-            <Breadcrumb>{sFileName}</Breadcrumb>
+          <Block key={oDir.id}>
+            <Breadcrumb onClick={() => getFilesByBreadCrumb(oDir)}>
+              {oDir.name}
+            </Breadcrumb>
             <Separator>{'>'}</Separator>
           </Block>
         );

@@ -12,7 +12,6 @@ import Files from '@/api/Files';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { add, upload, tile, table } from '@/images';
 import { search } from '@/images';
-import { useTransformCurrentFiles } from '@/modules/files/hooks/useTransformCurrentFiles';
 import {
   setFiles,
   setDisplayCreateDirModal,
@@ -67,9 +66,12 @@ const MyFiles = () => {
     dispatch(setSearchFileName(sSearchFileName));
   };
 
-  const handleOpenDir = (sFileType: string, iDirId: number) => {
+  const handleOpenDir = (
+    sFileType: string,
+    oDir: { id: number; name: string },
+  ) => {
     if (sFileType === 'dir') {
-      dispatch(setCurrentOpenFile(iDirId));
+      dispatch(setCurrentOpenFile(oDir));
     }
   };
 

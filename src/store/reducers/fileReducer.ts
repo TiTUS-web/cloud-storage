@@ -1,6 +1,7 @@
 import Files from '@/api/Files';
 import {
   FilesActionTypes,
+  TBreadCrumb,
   TFile,
   TFilesState,
   TSort,
@@ -14,6 +15,7 @@ const defaultState: TFilesState = {
   sFilesDisplayMode: 'table',
 
   arCurrentOpenDirs: [],
+  arBreadCrumbs: [],
   iLastCurrentOpenDir: null,
 
   arFiles: [],
@@ -53,8 +55,19 @@ export default function fileReducer(
     case FilesActionTypes.SET_CURRENT_OPEN_FILE:
       return {
         ...state,
-        arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload],
-        iLastCurrentOpenDir: action.payload,
+        arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload.id],
+        arBreadCrumbs: [
+          ...state.arBreadCrumbs,
+          { id: action.payload.id, name: action.payload.name },
+        ],
+        iLastCurrentOpenDir: action.payload.id,
+      };
+    case FilesActionTypes.BACK_CURRENT_OPEN_FILE:
+      return {
+        ...state,
+        arCurrentOpenDirs: [...action.payload.dirs],
+        arBreadCrumbs: [...action.payload.breadCrumbs],
+        iLastCurrentOpenDir: action.payload.id,
       };
     case FilesActionTypes.SET_SORT:
       return {
@@ -86,10 +99,25 @@ export const setDisplayCreateDirModal = (bDisplayModal: boolean) => {
   };
 };
 
-export const setCurrentOpenFile = (iDirId: number) => {
+export const setCurrentOpenFile = (oDir: { id: number; name: string }) => {
   return {
     type: FilesActionTypes.SET_CURRENT_OPEN_FILE,
-    payload: iDirId,
+    payload: oDir,
+  };
+};
+
+export const backCurrentOpenFile = (
+  arCurrentOpenDirs: number[] | [],
+  arBreadCrumbs: TBreadCrumb[] | [],
+  iCurrentOpenDir: number,
+) => {
+  return {
+    type: FilesActionTypes.BACK_CURRENT_OPEN_FILE,
+    payload: {
+      dirs: arCurrentOpenDirs,
+      breadCrumbs: arBreadCrumbs,
+      id: iCurrentOpenDir,
+    },
   };
 };
 

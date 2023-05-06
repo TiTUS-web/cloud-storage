@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import API from '@/api/axios';
-import { TFile, TFileCreation, TSort } from '@/types/files.types';
+import { TFile, TDirCreation, TSort } from '@/types/files.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
 
@@ -15,10 +15,10 @@ class Files {
     },
   };
 
-  createDir(oDir: TFileCreation): Promise<string> {
+  createDir(oDir: TDirCreation): Promise<string> {
     return new Promise((resolve, reject): void => {
       API.post('/files', oDir, this.oConfigAxios)
-        .then((oResponse: AxiosResponse<any, TFileCreation>) => {
+        .then((oResponse: AxiosResponse<any, TDirCreation>) => {
           resolve(oResponse.data.name);
         })
         .catch((oErr): void => {

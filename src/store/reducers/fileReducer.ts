@@ -1,6 +1,7 @@
 import Files from '@/api/Files';
 import {
   FilesActionTypes,
+  TBreadCrumb,
   TFile,
   TFilesState,
   TSort,
@@ -55,15 +56,18 @@ export default function fileReducer(
       return {
         ...state,
         arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload.id],
-        arBreadCrumbs: [...state.arBreadCrumbs, action.payload.name],
+        arBreadCrumbs: [
+          ...state.arBreadCrumbs,
+          { id: action.payload.id, name: action.payload.name },
+        ],
         iLastCurrentOpenDir: action.payload.id,
       };
     case FilesActionTypes.BACK_CURRENT_OPEN_FILE:
       return {
         ...state,
-        arCurrentOpenDirs: [...action.payload.arCurrentOpenDirs],
-        arBreadCrumbs: [...action.payload.arBreadCrumbs],
-        iLastCurrentOpenDir: action.payload.iLastCurrentOpenDir,
+        arCurrentOpenDirs: [...action.payload.dirs],
+        arBreadCrumbs: [...action.payload.breadCrumbs],
+        iLastCurrentOpenDir: action.payload.id,
       };
     case FilesActionTypes.SET_SORT:
       return {
@@ -104,12 +108,16 @@ export const setCurrentOpenFile = (oDir: { id: number; name: string }) => {
 
 export const backCurrentOpenFile = (
   arCurrentOpenDirs: number[] | [],
-  arBreadCrumbs: string[] | [],
-  iLastCurrentOpenDir: number | null,
+  arBreadCrumbs: TBreadCrumb[] | [],
+  iCurrentOpenDir: number,
 ) => {
   return {
     type: FilesActionTypes.BACK_CURRENT_OPEN_FILE,
-    payload: { arCurrentOpenDirs, arBreadCrumbs, iLastCurrentOpenDir },
+    payload: {
+      dirs: arCurrentOpenDirs,
+      breadCrumbs: arBreadCrumbs,
+      id: iCurrentOpenDir,
+    },
   };
 };
 

@@ -4,35 +4,70 @@ import styled from 'styled-components';
 
 import { back } from '@/images';
 
-import { backCurrentOpenFile } from '@/store/reducers/fileReducer';
+import { backCurrentOpenFile, setFiles } from '@/store/reducers/fileReducer';
+import { TBreadCrumb, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
   const dispatch = useDispatch();
 
-  const arCurrentOpenDirs: number[] = useSelector(
+  const arCurrentOpenDirs: number[] | [] = useSelector(
     (state: IState) => state.files.arCurrentOpenDirs,
   );
-
-  const arBreadCrumbs: string[] = useSelector(
+  const arBreadCrumbs: TBreadCrumb[] | [] = useSelector(
     (state: IState) => state.files.arBreadCrumbs,
   );
+  const arSort: TSort[] | [] = useSelector(
+    (state: IState) => state.files.arSort,
+  );
 
-  const handleBackDir = (
+  const getFilesByBreadCrumb = async (oDir: TBreadCrumb) => {
+    handleBackDirByBreadCrumb(arCurrentOpenDirs, arBreadCrumbs, oDir.id);
+    dispatch(await setFiles(oDir.id, arSort));
+  };
+
+  const handleBackDirByBreadCrumb = (
     arCurrentOpenDirs: number[],
-    arBreadCrumbs: string[],
+    arBreadCrumbs: TBreadCrumb[],
+    iDirId: number,
   ) => {
-    arCurrentOpenDirs.pop();
-    arBreadCrumbs.pop();
-    const iLastCurrentOpenDir: number =
+    const iCurrentOpenDir: number =
       arCurrentOpenDirs[arCurrentOpenDirs.length - 1];
+
+    if (iCurrentOpenDir === iDirId) return;
+
+    const index: number = arBreadCrumbs.findIndex(
+      (oBreadCrumb: TBreadCrumb): boolean => oBreadCrumb.id === iDirId,
+    );
+
+    const arNewCurrentOpenDirs: number[] = arCurrentOpenDirs.slice(
+      0,
+      index + 1,
+    );
+    const arNewBreadCrumbs: TBreadCrumb[] = arBreadCrumbs.slice(0, index + 1);
+    const iNewCurrentOpenDir: number =
+      arNewCurrentOpenDirs[arNewCurrentOpenDirs.length - 1];
 
     dispatch(
       backCurrentOpenFile(
-        arCurrentOpenDirs,
-        arBreadCrumbs,
-        iLastCurrentOpenDir,
+        arNewCurrentOpenDirs,
+        arNewBreadCrumbs,
+        iNewCurrentOpenDir,
       ),
+    );
+  };
+
+  const handleBackDir = (
+    arCurrentOpenDirs: number[],
+    arBreadCrumbs: TBreadCrumb[],
+  ) => {
+    arCurrentOpenDirs.pop();
+    arBreadCrumbs.pop();
+    const iCurrentOpenDir: number =
+      arCurrentOpenDirs[arCurrentOpenDirs.length - 1];
+
+    dispatch(
+      backCurrentOpenFile(arCurrentOpenDirs, arBreadCrumbs, iCurrentOpenDir),
     );
   };
 
@@ -47,13 +82,15 @@ const Breadcrumbs = () => {
       ) : (
         ''
       )}
-      <Breadcrumb>All files</Breadcrumb>
+      <Breadcrumb onClick={() => handleBackDir([], [])}>All files</Breadcrumb>
       {arBreadCrumbs.length ? <Separator>{'>'}</Separator> : ''}
 
-      {arBreadCrumbs.map((sFileName: string) => {
+      {arBreadCrumbs.map((oDir: { id: number; name: string }) => {
         return (
-          <Block key={sFileName}>
-            <Breadcrumb>{sFileName}</Breadcrumb>
+          <Block key={oDir.id}>
+            <Breadcrumb onClick={() => getFilesByBreadCrumb(oDir)}>
+              {oDir.name}
+            </Breadcrumb>
             <Separator>{'>'}</Separator>
           </Block>
         );

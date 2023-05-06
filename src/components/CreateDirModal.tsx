@@ -10,7 +10,7 @@ import {
   setDisplayCreateDirModal,
   setFiles,
 } from '@/store/reducers/fileReducer';
-import { TDirCreation, TSort } from '@/types/files.types';
+import { TBreadCrumb, TDirCreation, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
@@ -26,7 +26,7 @@ const CreateDirModal = () => {
 
   const oUser: TUser = oStorage.getData('oUser');
 
-  const arBreadCrumbs: string[] = useSelector(
+  const arBreadCrumbs: TBreadCrumb[] = useSelector(
     (state: IState) => state.files.arBreadCrumbs,
   );
   const iLastCurrentOpenDir: number | null = useSelector(
@@ -38,8 +38,12 @@ const CreateDirModal = () => {
   const [sAccessDir, setAccessDir] = useState('public');
 
   const getCurrentPath = () => {
-    if (arBreadCrumbs.length) {
-      return '/' + arBreadCrumbs.join('/') + '/';
+    const arName: string[] = arBreadCrumbs.map(
+      (oBreadCrumb: TBreadCrumb) => oBreadCrumb.name,
+    );
+
+    if (arName.length) {
+      return '/' + arName.join('/') + '/';
     }
 
     return '/';

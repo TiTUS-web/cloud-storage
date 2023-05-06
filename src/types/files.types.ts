@@ -3,7 +3,7 @@ export type TFilesState = {
   sFilesDisplayMode: string;
 
   arCurrentOpenDirs: number[] | [];
-  arBreadCrumbs: string[] | [];
+  arBreadCrumbs: TBreadCrumb[] | [];
   iLastCurrentOpenDir: number | null;
 
   arFiles: [];
@@ -11,7 +11,7 @@ export type TFilesState = {
 
   bShowCreateDirModal: boolean;
 
-  arSort: [];
+  arSort: TSort[] | [];
 };
 
 export type TFile = {
@@ -48,6 +48,11 @@ export type TDisplayProps = {
 export type TSort = {
   field: string;
   order: string;
+};
+
+export type TBreadCrumb = {
+  id: number;
+  name: string;
 };
 
 export enum FilesActionTypes {

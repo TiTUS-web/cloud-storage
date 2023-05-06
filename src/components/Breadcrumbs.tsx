@@ -1,19 +1,52 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { back } from '@/images';
 
+import { backCurrentOpenFile } from '@/store/reducers/fileReducer';
 import { IState } from '@/types/store.types';
 
 const Breadcrumbs = () => {
+  const dispatch = useDispatch();
+
+  const arCurrentOpenDirs: number[] = useSelector(
+    (state: IState) => state.files.arCurrentOpenDirs,
+  );
+
   const arBreadCrumbs: string[] = useSelector(
     (state: IState) => state.files.arBreadCrumbs,
   );
 
+  const handleBackDir = (
+    arCurrentOpenDirs: number[],
+    arBreadCrumbs: string[],
+  ) => {
+    arCurrentOpenDirs.pop();
+    arBreadCrumbs.pop();
+    const iLastCurrentOpenDir: number =
+      arCurrentOpenDirs[arCurrentOpenDirs.length - 1];
+
+    dispatch(
+      backCurrentOpenFile(
+        arCurrentOpenDirs,
+        arBreadCrumbs,
+        iLastCurrentOpenDir,
+      ),
+    );
+  };
+
   return (
     <Wrapper>
-      <IconButton src={back} alt='back' />
+      {arBreadCrumbs.length ? (
+        <IconButton
+          onClick={() => handleBackDir(arCurrentOpenDirs, arBreadCrumbs)}
+          src={back}
+          alt='back'
+        />
+      ) : (
+        ''
+      )}
       <Breadcrumb>All files</Breadcrumb>
       {arBreadCrumbs.length ? <Separator>{'>'}</Separator> : ''}
 

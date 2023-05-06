@@ -10,7 +10,7 @@ import {
   setDisplayCreateDirModal,
   setFiles,
 } from '@/store/reducers/fileReducer';
-import { TFile, TFileCreation, TSort } from '@/types/files.types';
+import { TDirCreation, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { TUser } from '@/types/users.types';
 import Storage from '@/utils/Storage';
@@ -26,20 +26,24 @@ const CreateDirModal = () => {
 
   const oUser: TUser = oStorage.getData('oUser');
 
-  const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
-  const arCurrentOpenDirs: number[] = useSelector(
-    (state: IState) => state.files.arCurrentOpenDirs,
+  const arBreadCrumbs: string[] = useSelector(
+    (state: IState) => state.files.arBreadCrumbs,
   );
   const iLastCurrentOpenDir: number | null = useSelector(
     (state: IState) => state.files.iLastCurrentOpenDir,
   );
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
 
-  const sCurrentPath: string = getPath(arFiles, arCurrentOpenDirs);
-
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
 
+  const getCurrentPath = () => {
+    if (arBreadCrumbs.length) {
+      return '/' + arBreadCrumbs.join('/') + '/';
+    }
+
+    return '/';
+  };
   const handleSelectAccess = (sAccessDir: string) => {
     setAccessDir(sAccessDir);
   };
@@ -54,12 +58,12 @@ const CreateDirModal = () => {
       return;
     }
 
-    const oDir: TFileCreation = {
+    const oDir: TDirCreation = {
       name: sNameDir,
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: `${sCurrentPath}${sNameDir}`,
+      path: getCurrentPath(),
       parentId: iLastCurrentOpenDir,
       access: sAccessDir,
     };
@@ -104,7 +108,7 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input value={sCurrentPath + sNameDir} type='text' readOnly />
+          <Input value={getCurrentPath() + sNameDir} type='text' readOnly />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

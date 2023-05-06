@@ -14,8 +14,8 @@ const defaultState: TFilesState = {
   sFilesDisplayMode: 'table',
 
   arCurrentOpenDirs: [],
-  iLastCurrentOpenDir: null,
   arBreadCrumbs: [],
+  iLastCurrentOpenDir: null,
 
   arFiles: [],
   bFilesNotFound: true,
@@ -55,8 +55,15 @@ export default function fileReducer(
       return {
         ...state,
         arCurrentOpenDirs: [...state.arCurrentOpenDirs, action.payload.id],
-        iLastCurrentOpenDir: action.payload.id,
         arBreadCrumbs: [...state.arBreadCrumbs, action.payload.name],
+        iLastCurrentOpenDir: action.payload.id,
+      };
+    case FilesActionTypes.BACK_CURRENT_OPEN_FILE:
+      return {
+        ...state,
+        arCurrentOpenDirs: [...action.payload.arCurrentOpenDirs],
+        arBreadCrumbs: [...action.payload.arBreadCrumbs],
+        iLastCurrentOpenDir: action.payload.iLastCurrentOpenDir,
       };
     case FilesActionTypes.SET_SORT:
       return {
@@ -92,6 +99,17 @@ export const setCurrentOpenFile = (oDir: { id: number; name: string }) => {
   return {
     type: FilesActionTypes.SET_CURRENT_OPEN_FILE,
     payload: oDir,
+  };
+};
+
+export const backCurrentOpenFile = (
+  arCurrentOpenDirs: number[] | [],
+  arBreadCrumbs: string[] | [],
+  iLastCurrentOpenDir: number | null,
+) => {
+  return {
+    type: FilesActionTypes.BACK_CURRENT_OPEN_FILE,
+    payload: { arCurrentOpenDirs, arBreadCrumbs, iLastCurrentOpenDir },
   };
 };
 

@@ -30,10 +30,10 @@ const Table: React.FC<TDisplayProps> = ({
   );
   const arFiles: TFile[] = useSelector((state: IState) => state.files.arFiles);
 
-  const [oTypeSort, setTypeSort] = useState({});
-  const [oNameSort, setNameSort] = useState({});
-  const [oDateSort, setDateSort] = useState({});
-  const [oSizeSort, setSizeSort] = useState({});
+  const [oTypeSort, setTypeSort] = useState({} as TSort);
+  const [oNameSort, setNameSort] = useState({} as TSort);
+  const [oDateSort, setDateSort] = useState({} as TSort);
+  const [oSizeSort, setSizeSort] = useState({} as TSort);
 
   useEffect(() => {
     const handleSort = () => {
@@ -77,13 +77,15 @@ const Table: React.FC<TDisplayProps> = ({
             <CellWrapper>
               Type
               <SortWrapper>
-                <Sort
+                <SortASC
                   onClick={() => setTypeSort({ field: 'type', order: 'ASC' })}
+                  active={oTypeSort.order === 'ASC'}
                   src={sortAscending}
                   alt='sort-ascending'
                 />
-                <Sort
+                <SortDESC
                   onClick={() => setTypeSort({ field: 'type', order: 'DESC' })}
+                  active={oTypeSort.order === 'DESC'}
                   src={sortDescending}
                   alt='sort-descending'
                 />
@@ -94,13 +96,15 @@ const Table: React.FC<TDisplayProps> = ({
             <CellWrapper>
               Name
               <SortWrapper>
-                <Sort
+                <SortASC
                   onClick={() => setNameSort({ field: 'name', order: 'ASC' })}
+                  active={oNameSort.order === 'ASC'}
                   src={sortAscending}
                   alt='sort-ascending'
                 />
-                <Sort
+                <SortDESC
                   onClick={() => setNameSort({ field: 'name', order: 'DESC' })}
+                  active={oNameSort.order === 'DESC'}
                   src={sortDescending}
                   alt='sort-descending'
                 />
@@ -111,13 +115,15 @@ const Table: React.FC<TDisplayProps> = ({
             <CellWrapper>
               Date created
               <SortWrapper>
-                <Sort
+                <SortASC
                   onClick={() => setDateSort({ field: 'date', order: 'ASC' })}
+                  active={oDateSort.order === 'ASC'}
                   src={sortAscending}
                   alt='sort-ascending'
                 />
-                <Sort
+                <SortDESC
                   onClick={() => setDateSort({ field: 'date', order: 'DESC' })}
+                  active={oDateSort.order === 'DESC'}
                   src={sortDescending}
                   alt='sort-descending'
                 />
@@ -128,13 +134,15 @@ const Table: React.FC<TDisplayProps> = ({
             <CellWrapper>
               Size
               <SortWrapper>
-                <Sort
+                <SortASC
                   onClick={() => setSizeSort({ field: 'size', order: 'ASC' })}
+                  active={oSizeSort.order === 'ASC'}
                   src={sortAscending}
                   alt='sort-ascending'
                 />
-                <Sort
+                <SortDESC
                   onClick={() => setSizeSort({ field: 'size', order: 'DESC' })}
+                  active={oSizeSort.order === 'DESC'}
                   src={sortDescending}
                   alt='sort-descending'
                 />
@@ -291,16 +299,22 @@ const SortWrapper = styled.div`
   margin-left: 2px;
 `;
 
-const Sort = styled.img`
+const SortASC = styled.img`
+  opacity: ${(props: StyledProps) => (props.active ? '1' : '0.5')};
   cursor: pointer;
   width: 10px;
   height: 8px;
   transition: 0.2s;
   margin-left: 2px;
+`;
 
-  :hover {
-    opacity: 0.8;
-  }
+const SortDESC = styled.img`
+  opacity: ${(props: StyledProps) => (props.active ? '1' : '0.5')};
+  cursor: pointer;
+  width: 10px;
+  height: 8px;
+  transition: 0.2s;
+  margin-left: 2px;
 `;
 
 export default React.memo(Table);

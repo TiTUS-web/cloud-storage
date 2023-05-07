@@ -68,7 +68,7 @@ export default function fileReducer(
         ...state,
         arCurrentOpenDirs: [...action.payload.dirs],
         arBreadCrumbs: [...action.payload.breadCrumbs],
-        iLastCurrentOpenDir: action.payload.id,
+        iLastCurrentOpenDir: action.payload.id ? action.payload.id : null,
       };
     case FilesActionTypes.SET_SORT:
       return {

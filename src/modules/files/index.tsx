@@ -85,6 +85,7 @@ const MyFiles = () => {
       .deleteFile(iFileId)
       .then((sFileName) => {
         emitSuccessMessages(`"${sFileName}" was successfully deleted`);
+        getFiles();
       })
       .catch((err) => {
         emitErrorMessages(err);

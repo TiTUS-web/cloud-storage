@@ -40,16 +40,16 @@ const CreateDirModal = () => {
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
 
-  const getCurrentPath = () => {
+  const getCurrentPath = (sFileName?: string) => {
     const arName: string[] = arBreadCrumbs.map(
       (oBreadCrumb: TBreadCrumb) => oBreadCrumb.name,
     );
 
     if (arName.length) {
-      return '/' + arName.join('/') + '/';
+      return '/' + arName.join('/') + (sFileName ? '/' + sFileName : '/');
     }
 
-    return '/';
+    return sFileName ? '/' + sFileName : '/';
   };
   const handleSelectAccess = (sAccessDir: string) => {
     setAccessDir(sAccessDir);
@@ -70,7 +70,7 @@ const CreateDirModal = () => {
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: getCurrentPath(),
+      path: getCurrentPath(sNameDir),
       parentId: iLastCurrentOpenDir,
       access: sAccessDir,
     };
@@ -115,7 +115,7 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input value={getCurrentPath() + sNameDir} type='text' readOnly />
+          <Input value={getCurrentPath(sNameDir)} type='text' readOnly />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

@@ -11,6 +11,7 @@ import {
   edit,
   sortAscending,
   sortDescending,
+  cross,
 } from '@/images';
 
 import { getSort } from '@/modules/files/utils/getSort';
@@ -91,6 +92,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oTypeSort.order && (
+                <ResetSort
+                  onClick={() => setTypeSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th>
@@ -110,6 +118,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oNameSort.order && (
+                <ResetSort
+                  onClick={() => setNameSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th center>
@@ -129,6 +144,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oDateSort.order && (
+                <ResetSort
+                  onClick={() => setDateSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th center>
@@ -148,6 +170,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oSizeSort.order && (
+                <ResetSort
+                  onClick={() => setSizeSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th center>Access</Th>
@@ -297,7 +326,7 @@ const Tr = styled.tr`
 const SortWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 2px;
+  margin: 0 5px 0 2px;
 `;
 
 const SortASC = styled.img`
@@ -316,6 +345,18 @@ const SortDESC = styled.img`
   height: 8px;
   transition: 0.2s;
   margin-left: 2px;
+`;
+
+const ResetSort = styled.img`
+  opacity: 0.6;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  transition: 0.2s;
+
+  :hover {
+    opacity: 1;
+  }
 `;
 
 export default React.memo(Table);

@@ -5,17 +5,15 @@ import styled from 'styled-components';
 
 import DragAndDrop from './components/DragAndDrop';
 import Table from './components/Table';
-import Tile from './components/Tile';
 
 import Files from '@/api/Files';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { add, upload, tile, table, cross } from '@/images';
+import { add, upload, cross } from '@/images';
 import { search } from '@/images';
 import {
   setFiles,
   setDisplayCreateDirModal,
-  setFilesMode,
   setSearchFileName,
   setCurrentOpenFile,
 } from '@/store/reducers/fileReducer';
@@ -35,9 +33,6 @@ const MyFiles = () => {
   const [sSearch, setSearch] = useState('');
   const [bSearchActive, setSearchActive] = useState(false);
 
-  const sFilesDisplayMode: string = useSelector(
-    (state: IState) => state.files.sFilesDisplayMode,
-  );
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
@@ -55,10 +50,6 @@ const MyFiles = () => {
 
   const handleBlurSearch = () => {
     setSearchActive(false);
-  };
-
-  const handleFilesMode = (sFilesMode: string) => {
-    dispatch(setFilesMode(sFilesMode));
   };
 
   const handleDisplayCreateDirModal = (sDisplayModal: boolean) => {
@@ -127,22 +118,6 @@ const MyFiles = () => {
           </Block>
 
           <Block>
-            <Utils>
-              <IconButton
-                bSearchActive={bSearchActive}
-                style={{ marginRight: '10px' }}
-                disabled={bFilesNotFound}
-                src={tile}
-                onClick={() => handleFilesMode('tile')}
-                alt='tile'
-              ></IconButton>
-              <IconButton
-                bSearchActive={bSearchActive}
-                src={table}
-                onClick={() => handleFilesMode('table')}
-                alt='table'
-              ></IconButton>
-            </Utils>
             <SearchInputWrapper bSearchActive={bSearchActive}>
               <SearchInput
                 value={sSearch}
@@ -168,21 +143,13 @@ const MyFiles = () => {
             )}
           </Block>
         </Header>
-        {sFilesDisplayMode && <Breadcrumbs />}
+        <Breadcrumbs />
 
-        {sFilesDisplayMode === 'table' ? (
-          <Table
-            handleDeleteFile={handleDeleteFile}
-            handleOpenDir={handleOpenDir}
-            getFiles={getFiles}
-          />
-        ) : (
-          <Tile
-            handleDeleteFile={handleDeleteFile}
-            handleOpenDir={handleOpenDir}
-            getFiles={getFiles}
-          />
-        )}
+        <Table
+          handleDeleteFile={handleDeleteFile}
+          handleOpenDir={handleOpenDir}
+          getFiles={getFiles}
+        />
         <DragAndDrop />
       </Container>
     </section>
@@ -214,11 +181,6 @@ const Block = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-`;
-
-const Utils = styled.div`
-  display: flex;
-  margin-right: 15px;
 `;
 
 const SearchInputWrapper = styled.div`

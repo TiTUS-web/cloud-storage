@@ -1,6 +1,5 @@
 export type TFilesState = {
   sSearchFileName: string;
-  sFilesDisplayMode: string;
 
   arCurrentOpenDirs: number[] | [];
   arBreadCrumbs: TBreadCrumb[] | [];
@@ -56,7 +55,6 @@ export type TBreadCrumb = {
 };
 
 export enum FilesActionTypes {
-  SET_FILES_MODE = 'SET_FILES_MODE',
   SET_FILES = 'SET_FILES',
   SET_DISPLAY_CREATE_DIR_MODAL = 'SET_DISPLAY_CREATE_DIR_MODAL',
   SET_CURRENT_OPEN_FILE = 'SET_CURRENT_OPEN_FILE',

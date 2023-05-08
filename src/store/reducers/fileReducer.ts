@@ -13,7 +13,6 @@ const oFiles: Files = new Files();
 
 const defaultState: TFilesState = {
   sSearchFileName: '',
-  sFilesDisplayMode: 'table',
 
   arCurrentOpenDirs: [],
   arBreadCrumbs: [],
@@ -32,11 +31,6 @@ export default function fileReducer(
   action: FilesActionReducer,
 ) {
   switch (action.type) {
-    case FilesActionTypes.SET_FILES_MODE:
-      return {
-        ...state,
-        sFilesDisplayMode: action.payload,
-      };
     case FilesActionTypes.SET_FILES:
       return {
         ...state,
@@ -79,10 +73,6 @@ export default function fileReducer(
       return state;
   }
 }
-
-export const setFilesMode = (sDisplayMode: string) => {
-  return { type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode };
-};
 
 export const setFiles = async (
   iDirId: number | null,

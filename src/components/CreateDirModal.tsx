@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Files from '@/api/Files';
 import { add, close } from '@/images';
 
+import { getCurrentPath } from '@/modules/files/utils/getCurrentPath';
 import {
   setDisplayCreateDirModal,
   setFiles,
@@ -40,17 +41,6 @@ const CreateDirModal = () => {
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
 
-  const getCurrentPath = (sFileName?: string) => {
-    const arName: string[] = arBreadCrumbs.map(
-      (oBreadCrumb: TBreadCrumb) => oBreadCrumb.name,
-    );
-
-    if (arName.length) {
-      return '/' + arName.join('/') + (sFileName ? '/' + sFileName : '/');
-    }
-
-    return sFileName ? '/' + sFileName : '/';
-  };
   const handleSelectAccess = (sAccessDir: string) => {
     setAccessDir(sAccessDir);
   };
@@ -70,7 +60,7 @@ const CreateDirModal = () => {
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: getCurrentPath(sNameDir),
+      path: getCurrentPath(arBreadCrumbs, sNameDir),
       parentId: iLastCurrentOpenDir,
       access: sAccessDir,
     };
@@ -115,7 +105,11 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input value={getCurrentPath(sNameDir)} type='text' readOnly />
+          <Input
+            value={getCurrentPath(arBreadCrumbs, sNameDir)}
+            type='text'
+            readOnly
+          />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

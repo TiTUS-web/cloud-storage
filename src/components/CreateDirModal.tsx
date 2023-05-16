@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Files from '@/api/Files';
 import { add, close } from '@/images';
 
+import { getCurrentPath } from '@/modules/files/utils/getCurrentPath';
 import {
   setDisplayCreateDirModal,
   setFiles,
@@ -33,21 +34,13 @@ const CreateDirModal = () => {
     (state: IState) => state.files.iLastCurrentOpenDir,
   );
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
+  const sSearchFileName: string = useSelector(
+    (state: IState) => state.files.sSearchFileName,
+  );
 
   const [sNameDir, setNameDir] = useState('');
   const [sAccessDir, setAccessDir] = useState('public');
 
-  const getCurrentPath = () => {
-    const arName: string[] = arBreadCrumbs.map(
-      (oBreadCrumb: TBreadCrumb) => oBreadCrumb.name,
-    );
-
-    if (arName.length) {
-      return '/' + arName.join('/') + '/';
-    }
-
-    return '/';
-  };
   const handleSelectAccess = (sAccessDir: string) => {
     setAccessDir(sAccessDir);
   };
@@ -67,7 +60,7 @@ const CreateDirModal = () => {
       type: 'dir',
       format: 'dir',
       userId: oUser.id,
-      path: getCurrentPath(),
+      path: getCurrentPath(arBreadCrumbs, sNameDir),
       parentId: iLastCurrentOpenDir,
       access: sAccessDir,
     };
@@ -79,7 +72,7 @@ const CreateDirModal = () => {
           `Directory "${sFileName}" was successfully created`,
         );
         handleDisplayCreateDirModal(false);
-        dispatch(await setFiles(iLastCurrentOpenDir, arSort));
+        dispatch(await setFiles(iLastCurrentOpenDir, arSort, sSearchFileName));
       })
       .catch((err) => {
         emitErrorMessages(err);
@@ -112,7 +105,11 @@ const CreateDirModal = () => {
         </Block>
         <Block>
           <Label>Path</Label>
-          <Input value={getCurrentPath() + sNameDir} type='text' readOnly />
+          <Input
+            value={getCurrentPath(arBreadCrumbs, sNameDir)}
+            type='text'
+            readOnly
+          />
         </Block>
 
         <CreateButton onClick={handleCreateDir}>

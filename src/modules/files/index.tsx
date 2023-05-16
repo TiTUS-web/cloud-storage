@@ -5,17 +5,15 @@ import styled from 'styled-components';
 
 import DragAndDrop from './components/DragAndDrop';
 import Table from './components/Table';
-import Tile from './components/Tile';
 
 import Files from '@/api/Files';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { add, upload, tile, table } from '@/images';
+import { add, upload, cross } from '@/images';
 import { search } from '@/images';
 import {
   setFiles,
   setDisplayCreateDirModal,
-  setFilesMode,
   setSearchFileName,
   setCurrentOpenFile,
 } from '@/store/reducers/fileReducer';
@@ -32,18 +30,19 @@ const MyFiles = () => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
   const oFiles: Files = new Files();
 
-  const [sSearchFileName, setSearch] = useState('');
+  const [sSearch, setSearch] = useState('');
   const [bSearchActive, setSearchActive] = useState(false);
+  const [arFilesUpload, setFilesUpload] = useState([] as File[]);
 
-  const sFilesDisplayMode: string = useSelector(
-    (state: IState) => state.files.sFilesDisplayMode,
-  );
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
   );
   const arSort: TSort[] = useSelector((state: IState) => state.files.arSort);
   const iLastCurrentOpenDir: number | null = useSelector(
     (state: IState) => state.files.iLastCurrentOpenDir,
+  );
+  const sSearchFileName: string = useSelector(
+    (state: IState) => state.files.sSearchFileName,
   );
 
   const handleFocusSearch = () => {
@@ -54,15 +53,12 @@ const MyFiles = () => {
     setSearchActive(false);
   };
 
-  const handleFilesMode = (sFilesMode: string) => {
-    dispatch(setFilesMode(sFilesMode));
-  };
-
   const handleDisplayCreateDirModal = (sDisplayModal: boolean) => {
     dispatch(setDisplayCreateDirModal(sDisplayModal));
   };
 
-  const handleSearchFileName = () => {
+  const handleSearchFileName = (sSearchFileName: string) => {
+    setSearch(sSearchFileName);
     dispatch(setSearchFileName(sSearchFileName));
   };
 
@@ -71,6 +67,7 @@ const MyFiles = () => {
     oDir: { id: number; name: string },
   ) => {
     if (sFileType === 'dir') {
+      dispatch(setSearchFileName(''));
       dispatch(setCurrentOpenFile(oDir));
     }
   };
@@ -80,6 +77,20 @@ const MyFiles = () => {
       .deleteFile(iFileId)
       .then((sFileName) => {
         emitSuccessMessages(`"${sFileName}" was successfully deleted`);
+        getFiles();
+      })
+      .catch((err) => {
+        emitErrorMessages(err);
+      });
+  };
+
+  const handleFileUpload = (arFiles: File[]) => {
+    setFilesUpload(arFiles);
+    oFiles
+      .uploadFile(arFiles, iLastCurrentOpenDir)
+      .then((sSuccessMessage: string) => {
+        getFiles();
+        emitSuccessMessages(sSuccessMessage);
       })
       .catch((err) => {
         emitErrorMessages(err);
@@ -87,12 +98,12 @@ const MyFiles = () => {
   };
 
   const getFiles = async () => {
-    dispatch(await setFiles(iLastCurrentOpenDir, arSort));
+    dispatch(await setFiles(iLastCurrentOpenDir, arSort, sSearchFileName));
   };
 
   useEffect(() => {
     getFiles();
-  }, [iLastCurrentOpenDir, arSort]);
+  }, [iLastCurrentOpenDir, arSort, sSearchFileName]);
 
   return (
     <section className='files' style={{ padding: '189px 0px 150px' }}>
@@ -111,34 +122,29 @@ const MyFiles = () => {
               </CreateButton>
 
               <UploadButton title='Upload File' type='button'>
-                <IconButton
-                  disabled={bFilesNotFound}
-                  src={upload}
-                  alt='upload'
-                ></IconButton>
+                <FileUploadLabel htmlFor='upload'>
+                  <IconButton
+                    disabled={bFilesNotFound}
+                    src={upload}
+                    alt='upload'
+                  ></IconButton>
+                </FileUploadLabel>
+                <FileUpload
+                  onChange={(event: Event | any) =>
+                    handleFileUpload([...arFilesUpload, ...event.target.files])
+                  }
+                  id='upload'
+                  type='file'
+                  multiple
+                />
               </UploadButton>
             </Buttons>
           </Block>
 
           <Block>
-            <Utils>
-              <IconButton
-                bSearchActive={bSearchActive}
-                style={{ marginRight: '10px' }}
-                disabled={bFilesNotFound}
-                src={tile}
-                onClick={() => handleFilesMode('tile')}
-                alt='tile'
-              ></IconButton>
-              <IconButton
-                bSearchActive={bSearchActive}
-                src={table}
-                onClick={() => handleFilesMode('table')}
-                alt='table'
-              ></IconButton>
-            </Utils>
             <SearchInputWrapper bSearchActive={bSearchActive}>
               <SearchInput
+                value={sSearch}
                 onFocus={() => handleFocusSearch()}
                 onBlur={() => handleBlurSearch()}
                 onChange={(event: Event | any) => setSearch(event.target.value)}
@@ -146,29 +152,29 @@ const MyFiles = () => {
                 placeholder={bSearchActive ? 'Enter file name' : 'Сloud search'}
               />
               <SearchButton
-                onClick={() => handleSearchFileName()}
+                onClick={() => handleSearchFileName(sSearch)}
                 src={search}
                 alt='search'
               />
             </SearchInputWrapper>
+            {sSearch && (
+              <SearchButton
+                onClick={() => handleSearchFileName('')}
+                style={{ marginLeft: '10px' }}
+                src={cross}
+                alt='cross'
+              />
+            )}
           </Block>
         </Header>
-        {sFilesDisplayMode && <Breadcrumbs />}
+        <Breadcrumbs />
 
-        {sFilesDisplayMode === 'table' ? (
-          <Table
-            handleDeleteFile={handleDeleteFile}
-            handleOpenDir={handleOpenDir}
-            getFiles={getFiles}
-          />
-        ) : (
-          <Tile
-            handleDeleteFile={handleDeleteFile}
-            handleOpenDir={handleOpenDir}
-            getFiles={getFiles}
-          />
-        )}
-        <DragAndDrop />
+        <Table
+          handleDeleteFile={handleDeleteFile}
+          handleOpenDir={handleOpenDir}
+          getFiles={getFiles}
+        />
+        <DragAndDrop arFilesUpload={arFilesUpload} />
       </Container>
     </section>
   );
@@ -199,11 +205,6 @@ const Block = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-`;
-
-const Utils = styled.div`
-  display: flex;
-  margin-right: 15px;
 `;
 
 const SearchInputWrapper = styled.div`
@@ -250,16 +251,25 @@ const UploadButton = styled.button`
   font-size: 14px;
   line-height: 17px;
   color: #ffffff;
-  padding: 11px 15px 12px;
+  padding: 0;
   background: #f04438;
   border-radius: 4px;
   display: flex;
   align-items: center;
+`;
+
+const FileUploadLabel = styled.label`
+  padding: 11px 15px 12px;
   transition: 0.2s;
+  cursor: pointer;
 
   :hover {
     opacity: 0.8;
   }
+`;
+
+const FileUpload = styled.input`
+  display: none;
 `;
 
 const Container = styled.div`

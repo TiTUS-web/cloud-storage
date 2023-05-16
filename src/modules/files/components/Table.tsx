@@ -11,10 +11,11 @@ import {
   edit,
   sortAscending,
   sortDescending,
+  cross,
 } from '@/images';
 
 import { getSort } from '@/modules/files/utils/getSort';
-import { setSort } from '@/store/reducers/fileReducer';
+import { setSearchFileName, setSort } from '@/store/reducers/fileReducer';
 import { TFile, TDisplayProps, TSort } from '@/types/files.types';
 import { IState } from '@/types/store.types';
 import { StyledProps } from '@/types/styled';
@@ -44,6 +45,7 @@ const Table: React.FC<TDisplayProps> = ({
         oSizeSort,
       ]);
 
+      dispatch(setSearchFileName(''));
       dispatch(setSort(arSort));
     };
 
@@ -90,6 +92,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oTypeSort.order && (
+                <ResetSort
+                  onClick={() => setTypeSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th>
@@ -109,6 +118,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oNameSort.order && (
+                <ResetSort
+                  onClick={() => setNameSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th center>
@@ -128,6 +144,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oDateSort.order && (
+                <ResetSort
+                  onClick={() => setDateSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th center>
@@ -147,6 +170,13 @@ const Table: React.FC<TDisplayProps> = ({
                   alt='sort-descending'
                 />
               </SortWrapper>
+              {oSizeSort.order && (
+                <ResetSort
+                  onClick={() => setSizeSort({} as TSort)}
+                  src={cross}
+                  alt='cross'
+                />
+              )}
             </CellWrapper>
           </Th>
           <Th center>Access</Th>
@@ -165,8 +195,8 @@ const Table: React.FC<TDisplayProps> = ({
               <Type src={typeImg} alt='img' />
             </Td>
             <Td>{oFile.name}</Td>
-            <Td center>{oFile.createdAt}</Td>
-            <Td center>{oFile.size}</Td>
+            <Td left>{oFile.createdAt}</Td>
+            <Td left>{oFile.size}</Td>
             <Td center>
               {/* Access controls also help to prevent accidental deletion or modification of files, which could lead to data loss or damage. */}
               <Access>{oFile.access}</Access>
@@ -296,7 +326,7 @@ const Tr = styled.tr`
 const SortWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 2px;
+  margin: 0 5px 0 2px;
 `;
 
 const SortASC = styled.img`
@@ -315,6 +345,18 @@ const SortDESC = styled.img`
   height: 8px;
   transition: 0.2s;
   margin-left: 2px;
+`;
+
+const ResetSort = styled.img`
+  opacity: 0.6;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  transition: 0.2s;
+
+  :hover {
+    opacity: 1;
+  }
 `;
 
 export default React.memo(Table);

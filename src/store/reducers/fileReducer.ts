@@ -1,4 +1,5 @@
 import Files from '@/api/Files';
+import { getFilteredFilesByName } from '@/modules/files/utils/getFilteredFilesByName';
 import {
   FilesActionTypes,
   TBreadCrumb,
@@ -12,7 +13,6 @@ const oFiles: Files = new Files();
 
 const defaultState: TFilesState = {
   sSearchFileName: '',
-  sFilesDisplayMode: 'table',
 
   arCurrentOpenDirs: [],
   arBreadCrumbs: [],
@@ -31,11 +31,6 @@ export default function fileReducer(
   action: FilesActionReducer,
 ) {
   switch (action.type) {
-    case FilesActionTypes.SET_FILES_MODE:
-      return {
-        ...state,
-        sFilesDisplayMode: action.payload,
-      };
     case FilesActionTypes.SET_FILES:
       return {
         ...state,
@@ -67,7 +62,7 @@ export default function fileReducer(
         ...state,
         arCurrentOpenDirs: [...action.payload.dirs],
         arBreadCrumbs: [...action.payload.breadCrumbs],
-        iLastCurrentOpenDir: action.payload.id,
+        iLastCurrentOpenDir: action.payload.id ? action.payload.id : null,
       };
     case FilesActionTypes.SET_SORT:
       return {
@@ -79,12 +74,16 @@ export default function fileReducer(
   }
 }
 
-export const setFilesMode = (sDisplayMode: string) => {
-  return { type: FilesActionTypes.SET_FILES_MODE, payload: sDisplayMode };
-};
+export const setFiles = async (
+  iDirId: number | null,
+  arSort: TSort[],
+  sSearchFileName: string,
+) => {
+  let arFiles: TFile[] = await oFiles.getFiles(iDirId, arSort);
 
-export const setFiles = async (iDirId: number | null, arSort: TSort[]) => {
-  const arFiles: TFile[] = await oFiles.getFiles(iDirId, arSort);
+  if (sSearchFileName) {
+    arFiles = getFilteredFilesByName(arFiles, sSearchFileName);
+  }
 
   return {
     type: FilesActionTypes.SET_FILES,

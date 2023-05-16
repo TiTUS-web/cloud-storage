@@ -44,6 +44,10 @@ export type TDisplayProps = {
   getFiles: Function;
 };
 
+export type TDragAndDropProps = {
+  arFilesUpload: File[];
+};
+
 export type TSort = {
   field: string;
   order: string;

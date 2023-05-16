@@ -32,6 +32,7 @@ const MyFiles = () => {
 
   const [sSearch, setSearch] = useState('');
   const [bSearchActive, setSearchActive] = useState(false);
+  const [arFilesUpload, setFilesUpload] = useState([] as File[]);
 
   const bFilesNotFound: boolean = useSelector(
     (state: IState) => state.files.bFilesNotFound,
@@ -83,6 +84,19 @@ const MyFiles = () => {
       });
   };
 
+  const handleFileUpload = (arFiles: File[]) => {
+    setFilesUpload(arFiles);
+    oFiles
+      .uploadFile(arFiles, iLastCurrentOpenDir)
+      .then((sSuccessMessage: string) => {
+        getFiles();
+        emitSuccessMessages(sSuccessMessage);
+      })
+      .catch((err) => {
+        emitErrorMessages(err);
+      });
+  };
+
   const getFiles = async () => {
     dispatch(await setFiles(iLastCurrentOpenDir, arSort, sSearchFileName));
   };
@@ -108,11 +122,21 @@ const MyFiles = () => {
               </CreateButton>
 
               <UploadButton title='Upload File' type='button'>
-                <IconButton
-                  disabled={bFilesNotFound}
-                  src={upload}
-                  alt='upload'
-                ></IconButton>
+                <FileUploadLabel htmlFor='upload'>
+                  <IconButton
+                    disabled={bFilesNotFound}
+                    src={upload}
+                    alt='upload'
+                  ></IconButton>
+                </FileUploadLabel>
+                <FileUpload
+                  onChange={(event: Event | any) =>
+                    handleFileUpload([...arFilesUpload, ...event.target.files])
+                  }
+                  id='upload'
+                  type='file'
+                  multiple
+                />
               </UploadButton>
             </Buttons>
           </Block>
@@ -150,7 +174,7 @@ const MyFiles = () => {
           handleOpenDir={handleOpenDir}
           getFiles={getFiles}
         />
-        <DragAndDrop />
+        <DragAndDrop arFilesUpload={arFilesUpload} />
       </Container>
     </section>
   );
@@ -227,16 +251,25 @@ const UploadButton = styled.button`
   font-size: 14px;
   line-height: 17px;
   color: #ffffff;
-  padding: 11px 15px 12px;
+  padding: 0;
   background: #f04438;
   border-radius: 4px;
   display: flex;
   align-items: center;
+`;
+
+const FileUploadLabel = styled.label`
+  padding: 11px 15px 12px;
   transition: 0.2s;
+  cursor: pointer;
 
   :hover {
     opacity: 0.8;
   }
+`;
+
+const FileUpload = styled.input`
+  display: none;
 `;
 
 const Container = styled.div`

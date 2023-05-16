@@ -11,7 +11,13 @@ class Files {
   private oUser: TUser = this.oStorage.getData('oUser');
   private oConfigAxios = {
     headers: {
-      Autorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${this.token}`,
+    },
+  };
+  private oConfigUpload = {
+    headers: {
+      Authorization: `Bearer ${this.token}`,
+      'content-type': 'multipart/form-data',
     },
   };
 
@@ -69,6 +75,28 @@ class Files {
         })
         .catch((oErr): void => {
           reject(oErr.response.data);
+        });
+    });
+  }
+
+  uploadFile(arFiles: File[], parentId: number | null): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const sPostUrl: string = parentId
+        ? `/files/upload/${this.oUser.id}?parent=${parentId}`
+        : `/files/upload/${this.oUser.id}`;
+
+      const oFormData: FormData = new FormData();
+
+      for (let i = 0; i < arFiles.length; i++) {
+        oFormData.append('files[]', arFiles[i]);
+      }
+
+      API.post(sPostUrl, oFormData, this.oConfigUpload)
+        .then((oResponse: AxiosResponse<any, string>) => {
+          resolve(oResponse.data);
+        })
+        .catch((oErr): void => {
+          reject(oErr.response);
         });
     });
   }

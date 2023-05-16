@@ -195,8 +195,8 @@ const Table: React.FC<TDisplayProps> = ({
               <Type src={typeImg} alt='img' />
             </Td>
             <Td>{oFile.name}</Td>
-            <Td center>{oFile.createdAt}</Td>
-            <Td center>{oFile.size}</Td>
+            <Td left>{oFile.createdAt}</Td>
+            <Td left>{oFile.size}</Td>
             <Td center>
               {/* Access controls also help to prevent accidental deletion or modification of files, which could lead to data loss or damage. */}
               <Access>{oFile.access}</Access>
